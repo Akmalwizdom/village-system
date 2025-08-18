@@ -10,8 +10,8 @@
                     <div class="row align-items-center">
                         <div class="col-md-6">
                             <div class="d-flex align-items-center">
-                                <div class="avtar avtar-l bg-gradient-primary me-3">
-                                    <i class="ti ti-users text-white f-24"></i>
+                                <div class="avtar avtar-l bg-light-primary me-3">
+                                    <i class="ti ti-users text-primary f-24"></i>
                                 </div>
                                 <div>
                                     <h4 class="mb-1 text-dark fw-bold">Daftar Akun Penduduk</h4>
@@ -48,16 +48,13 @@
         <div class="col-md-6 col-xl-3">
             <div class="card border-0 shadow-sm">
                 <div class="card-body">
-                    <div class="d-flex align-items-center">
-                        <div class="avtar avtar-s bg-gradient-success me-3">
-                            <i class="ti ti-users f-18 text-white"></i>
+                    <div class="d-flex align-items-center justify-content-between">
+                        <div>
+                            <h6 class="mb-2 f-w-400 text-muted">Total Penduduk</h6>
+                            <h4 class="mb-0">{{ $users->count() }}</h4>
                         </div>
-                        <div class="flex-grow-1">
-                            <h3 class="mb-0 fw-bold text-success">{{ $users->count() }}</h3>
-                            <p class="mb-0 text-muted f-14">Total Penduduk</p>
-                        </div>
-                        <div class="avtar avtar-xs bg-light-success">
-                            <i class="ti ti-trending-up f-12 text-success"></i>
+                        <div class="avtar avtar-s bg-light-primary">
+                            <i class="ti ti-users f-20"></i>
                         </div>
                     </div>
                 </div>
@@ -66,16 +63,13 @@
         <div class="col-md-6 col-xl-3">
             <div class="card border-0 shadow-sm">
                 <div class="card-body">
-                    <div class="d-flex align-items-center">
-                        <div class="avtar avtar-s bg-gradient-info me-3">
-                            <i class="ti ti-user-check f-18 text-white"></i>
+                    <div class="d-flex align-items-center justify-content-between">
+                        <div>
+                            <h6 class="mb-2 f-w-400 text-muted">Aktif</h6>
+                            <h4 class="mb-0">{{ $users->where('status', 'approved')->count() }}</h4>
                         </div>
-                        <div class="flex-grow-1">
-                            <h3 class="mb-0 fw-bold text-info">{{ $users->where('status', 'approved')->count() }}</h3>
-                            <p class="mb-0 text-muted f-14">Aktif</p>
-                        </div>
-                        <div class="avtar avtar-xs bg-light-info">
-                            <i class="ti ti-check f-12 text-info"></i>
+                        <div class="avtar avtar-s bg-light-success">
+                            <i class="ti ti-user-check f-20"></i>
                         </div>
                     </div>
                 </div>
@@ -84,16 +78,13 @@
         <div class="col-md-6 col-xl-3">
             <div class="card border-0 shadow-sm">
                 <div class="card-body">
-                    <div class="d-flex align-items-center">
-                        <div class="avtar avtar-s bg-gradient-warning me-3">
-                            <i class="ti ti-calendar-plus f-18 text-white"></i>
+                    <div class="d-flex align-items-center justify-content-between">
+                        <div>
+                            <h6 class="mb-2 f-w-400 text-muted">Bulan Ini</h6>
+                            <h4 class="mb-0">{{ $users->where('created_at', '>=', now()->subDays(30))->count() }}</h4>
                         </div>
-                        <div class="flex-grow-1">
-                            <h3 class="mb-0 fw-bold text-warning">{{ $users->where('created_at', '>=', now()->subDays(30))->count() }}</h3>
-                            <p class="mb-0 text-muted f-14">Bulan Ini</p>
-                        </div>
-                        <div class="avtar avtar-xs bg-light-warning">
-                            <i class="ti ti-calendar f-12 text-warning"></i>
+                        <div class="avtar avtar-s bg-light-warning">
+                            <i class="ti ti-calendar-plus f-20"></i>
                         </div>
                     </div>
                 </div>
@@ -102,16 +93,13 @@
         <div class="col-md-6 col-xl-3">
             <div class="card border-0 shadow-sm">
                 <div class="card-body">
-                    <div class="d-flex align-items-center">
-                        <div class="avtar avtar-s bg-gradient-primary me-3">
-                            <i class="ti ti-clock f-18 text-white"></i>
+                    <div class="d-flex align-items-center justify-content-between">
+                        <div>
+                            <h6 class="mb-2 f-w-400 text-muted">Minggu Ini</h6>
+                            <h4 class="mb-0">{{ $users->where('created_at', '>=', now()->subDays(7))->count() }}</h4>
                         </div>
-                        <div class="flex-grow-1">
-                            <h3 class="mb-0 fw-bold text-primary">{{ $users->where('created_at', '>=', now()->subDays(7))->count() }}</h3>
-                            <p class="mb-0 text-muted f-14">Minggu Ini</p>
-                        </div>
-                        <div class="avtar avtar-xs bg-light-primary">
-                            <i class="ti ti-clock f-12 text-primary"></i>
+                        <div class="avtar avtar-s bg-light-info">
+                            <i class="ti ti-clock f-20"></i>
                         </div>
                     </div>
                 </div>
@@ -146,7 +134,7 @@
         <div class="card-body p-0">
             @if($users->count() > 0)
                 <div class="table-responsive">
-                    <table class="table table-hover mb-0" id="usersTable">
+                    <table class="table table-hover table-borderless mb-0" id="usersTable">
                         <thead class="table-light">
                             <tr>
                                 <th class="border-top-0 ps-4">
@@ -173,8 +161,8 @@
                                 <td>
                                     <div class="d-flex align-items-center">
                                         <div class="position-relative me-3">
-                                            <div class="avtar avtar-s bg-gradient-primary">
-                                                <span class="text-white f-12 fw-bold">
+                                            <div class="avtar avtar-s bg-light-primary">
+                                                <span class="text-primary f-12 fw-bold">
                                                     {{ strtoupper(substr($user->name, 0, 2)) }}
                                                 </span>
                                             </div>
@@ -216,15 +204,15 @@
                                 </td>
                                 <td class="text-center">
                                     @if($user->status == 'approved')
-                                        <span class="badge bg-success-subtle text-success border border-success-subtle">
+                                        <span class="badge bg-light-success border border-success">
                                             <i class="ti ti-check me-1"></i>Aktif
                                         </span>
                                     @elseif($user->status == 'submitted')
-                                        <span class="badge bg-warning-subtle text-warning border border-warning-subtle">
+                                        <span class="badge bg-light-warning border border-warning">
                                             <i class="ti ti-clock me-1"></i>Pending
                                         </span>
                                     @else
-                                        <span class="badge bg-danger-subtle text-danger border border-danger-subtle">
+                                        <span class="badge bg-light-danger border border-danger">
                                             <i class="ti ti-x me-1"></i>Nonaktif
                                         </span>
                                     @endif
@@ -335,27 +323,27 @@
     <div class="modal fade" id="viewModal{{ $user->id }}" tabindex="-1">
         <div class="modal-dialog modal-lg modal-dialog-centered">
             <div class="modal-content border-0 shadow">
-                <div class="modal-header bg-gradient-primary text-white">
-                    <h5 class="modal-title">
+                <div class="modal-header bg-light-primary">
+                    <h5 class="modal-title text-primary">
                         <i class="ti ti-user-circle me-2"></i>Profile Penduduk
                     </h5>
-                    <button type="button" class="btn-close btn-close-white" data-bs-dismiss="modal"></button>
+                    <button type="button" class="btn-close" data-bs-dismiss="modal"></button>
                 </div>
                 <div class="modal-body p-4">
                     <div class="row">
                         <div class="col-md-4 text-center">
-                            <div class="avtar avtar-xl bg-gradient-primary text-white mb-3 mx-auto">
+                            <div class="avtar avtar-xl bg-light-primary text-primary mb-3 mx-auto">
                                 <span class="f-24 fw-bold">{{ strtoupper(substr($user->name, 0, 2)) }}</span>
                             </div>
                             <h6 class="mb-1">{{ $user->name }}</h6>
                             <small class="text-muted">ID: {{ str_pad($user->id, 4, '0', STR_PAD_LEFT) }}</small>
                             <div class="mt-3">
                                 @if($user->status == 'approved')
-                                    <span class="badge bg-success-subtle text-success border border-success-subtle px-3 py-2">
+                                    <span class="badge bg-light-success text-success border border-success px-3 py-2">
                                         <i class="ti ti-check me-1"></i>Akun Aktif
                                     </span>
                                 @else
-                                    <span class="badge bg-warning-subtle text-warning border border-warning-subtle px-3 py-2">
+                                    <span class="badge bg-light-warning text-warning border border-warning px-3 py-2">
                                         <i class="ti ti-clock me-1"></i>Pending
                                     </span>
                                 @endif

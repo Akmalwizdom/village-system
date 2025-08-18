@@ -1,10 +1,29 @@
 @extends('layouts.app')
 
 @section('content')
+<div class="container-fluid">
+    {{-- Page Header --}}
+    <div class="row mb-4">
+        <div class="col-12">
+            <div class="card border-0 shadow-sm">
+                <div class="card-body">
+                    <div class="d-flex align-items-center">
+                        <div class="avtar avtar-l bg-light-primary me-3">
+                            <i class="ti ti-users text-primary f-24"></i>
+                        </div>
+                        <div>
+                            <h4 class="mb-1 text-dark fw-bold">Data Penduduk</h4>
+                            <p class="text-muted mb-0">Kelola dan pantau data kependudukan desa</p>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
 
-<div class="row">
+    <div class="row g-3 mb-4">
     <div class="col-md-6 col-xl-3">
-        <div class="card">
+        <div class="card border-0 shadow-sm">
             <div class="card-body">
                 <div class="d-flex align-items-center justify-content-between">
                     <div>
@@ -19,7 +38,7 @@
         </div>
     </div>
     <div class="col-md-6 col-xl-3">
-        <div class="card">
+        <div class="card border-0 shadow-sm">
             <div class="card-body">
                 <div class="d-flex align-items-center justify-content-between">
                     <div>
@@ -34,7 +53,7 @@
         </div>
     </div>
     <div class="col-md-6 col-xl-3">
-        <div class="card">
+        <div class="card border-0 shadow-sm">
             <div class="card-body">
                 <div class="d-flex align-items-center justify-content-between">
                     <div>
@@ -49,7 +68,7 @@
         </div>
     </div>
     <div class="col-md-6 col-xl-3">
-        <div class="card">
+        <div class="card border-0 shadow-sm">
             <div class="card-body">
                 <div class="d-flex align-items-center justify-content-between">
                     <div>
@@ -66,9 +85,11 @@
     </div>
 
     <div class="col-md-12">
-        <div class="card tbl-card">
-            <div class="card-header d-flex align-items-center justify-content-between">
-                <h5 class="mb-0">Daftar Penduduk</h5>
+        <div class="card border-0 shadow-sm">
+            <div class="card-header bg-white border-0 d-flex align-items-center justify-content-between">
+                <h5 class="mb-0 fw-bold">
+                    <i class="ti ti-list me-2 text-primary"></i>Daftar Penduduk
+                </h5>
                 <a href="/resident/create" class="btn btn-primary">
                     <i class="ti ti-plus me-1"></i>Tambah Penduduk
                 </a>
@@ -76,20 +97,20 @@
             <div class="card-body">
                 <div class="table-responsive">
                     <table class="table table-hover table-borderless mb-0">
-                        <thead>
+                        <thead class="table-light">
                             <tr>
-                                <th>NO</th>
-                                <th>NIK</th>
-                                <th>NAMA</th>
-                                <th>JENIS KELAMIN</th>
-                                <th>TEMPAT, TANGGAL LAHIR</th>
-                                <th>ALAMAT</th>
-                                <th>AGAMA</th>
-                                <th>STATUS PERKAWINAN</th>
-                                <th>PEKERJAAN</th>
-                                <th>TELEPON</th>
-                                <th>STATUS</th>
-                                <th class="text-end">AKSI</th>
+                                <th class="border-top-0">NO</th>
+                                <th class="border-top-0">NIK</th>
+                                <th class="border-top-0">NAMA</th>
+                                <th class="border-top-0">JENIS KELAMIN</th>
+                                <th class="border-top-0">TEMPAT, TANGGAL LAHIR</th>
+                                <th class="border-top-0">ALAMAT</th>
+                                <th class="border-top-0">AGAMA</th>
+                                <th class="border-top-0">STATUS PERKAWINAN</th>
+                                <th class="border-top-0">PEKERJAAN</th>
+                                <th class="border-top-0">TELEPON</th>
+                                <th class="border-top-0">STATUS</th>
+                                <th class="border-top-0 text-end">AKSI</th>
                             </tr>
                         </thead>
                         <tbody>
@@ -196,14 +217,16 @@
 
                             <div class="modal fade" id="deleteModal{{ $item->id }}" tabindex="-1" aria-labelledby="deleteModalLabel{{ $item->id }}" aria-hidden="true">
                                 <div class="modal-dialog">
-                                    <div class="modal-content">
-                                        <div class="modal-header">
-                                            <h5 class="modal-title" id="deleteModalLabel{{ $item->id }}">Konfirmasi Hapus</h5>
+                                    <div class="modal-content border-0 shadow">
+                                        <div class="modal-header bg-light-danger">
+                                            <h5 class="modal-title text-danger" id="deleteModalLabel{{ $item->id }}">
+                                                <i class="ti ti-trash me-2"></i>Konfirmasi Hapus
+                                            </h5>
                                             <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
                                         </div>
                                         <div class="modal-body">
                                             <div class="text-center">
-                                                <div class="avtar avtar-xl bg-light-danger text-danger rounded-circle mb-3 mx-auto">
+                                                <div class="avtar avtar-xl bg-light-danger text-danger mb-3 mx-auto">
                                                     <i class="ti ti-trash f-24"></i>
                                                 </div>
                                                 <h6 class="mb-2">Hapus Data Penduduk</h6>
@@ -228,11 +251,11 @@
                             <tr>
                                 <td colspan="11" class="text-center py-4">
                                     <div class="d-flex flex-column align-items-center">
-                                        <div class="avtar avtar-xl bg-light-secondary text-secondary rounded-circle mb-3">
-                                            <i class="ti ti-users f-24"></i>
+                                        <div class="avtar avtar-xl bg-light-secondary mb-3 mx-auto">
+                                            <i class="ti ti-users f-36 text-muted"></i>
                                         </div>
                                         <h6 class="mb-1">Tidak ada data penduduk</h6>
-                                        <p class="text-muted mb-3">Belum ada data penduduk yang terdaftar dalam sistem</p>
+                                        <p class="text-muted mb-4">Belum ada data penduduk yang terdaftar dalam sistem</p>
                                         <a href="/resident/create" class="btn btn-primary">
                                             <i class="ti ti-plus me-1"></i>Tambah Penduduk Pertama
                                         </a>
@@ -245,18 +268,25 @@
                 </div>
 
                 @if($residents->count() > 10)
-                <div class="d-flex align-items-center justify-content-between mt-3">
-                    <div class="text-muted">
-                        Menampilkan {{ $residents->firstItem() ?? 0 }} sampai {{ $residents->lastItem() ?? 0 }} 
-                        dari {{ $residents->total() ?? $residents->count() }} data
+                <div class="card-footer bg-light border-0">
+                    <div class="row align-items-center">
+                        <div class="col-md-6">
+                            <small class="text-muted">
+                                Menampilkan {{ $residents->firstItem() ?? 0 }} sampai {{ $residents->lastItem() ?? 0 }} 
+                                dari {{ $residents->total() ?? $residents->count() }} data
+                            </small>
+                        </div>
+                        <div class="col-md-6 text-end">
+                            @if(method_exists($residents, 'links'))
+                                {{ $residents->links() }}
+                            @endif
+                        </div>
                     </div>
-                    @if(method_exists($residents, 'links'))
-                        {{ $residents->links() }}
-                    @endif
                 </div>
                 @endif
             </div>
         </div>
     </div>
+</div>
 </div>
 @endsection

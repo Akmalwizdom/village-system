@@ -5,21 +5,34 @@
     {{-- Page Header --}}
     <div class="row mb-4">
         <div class="col-12">
-            <div class="d-flex align-items-center justify-content-between">
-                <div>
-                    <h4 class="mb-1 text-dark">Permintaan Akun Pengguna</h4>
-                    <p class="text-muted mb-0">Kelola dan review permintaan akun pengguna baru</p>
-                </div>
-                <div class="dropdown">
-                    <button class="btn btn-outline-primary dropdown-toggle" type="button" data-bs-toggle="dropdown">
-                        <i class="ti ti-filter me-1"></i>Filter Status
-                    </button>
-                    <ul class="dropdown-menu">
-                        <li><a class="dropdown-item" href="?status=all">Semua Status</a></li>
-                        <li><a class="dropdown-item" href="?status=submitted">Menunggu</a></li>
-                        <li><a class="dropdown-item" href="?status=approved">Disetujui</a></li>
-                        <li><a class="dropdown-item" href="?status=rejected">Ditolak</a></li>
-                    </ul>
+            <div class="card border-0 shadow-sm">
+                <div class="card-body">
+                    <div class="row align-items-center">
+                        <div class="col-md-6">
+                            <div class="d-flex align-items-center">
+                                <div class="avtar avtar-l bg-light-primary me-3">
+                                    <i class="ti ti-user-plus text-primary f-24"></i>
+                                </div>
+                                <div>
+                                    <h4 class="mb-1 text-dark fw-bold">Permintaan Akun Pengguna</h4>
+                                    <p class="text-muted mb-0">Kelola dan review permintaan akun pengguna baru</p>
+                                </div>
+                            </div>
+                        </div>
+                        <div class="col-md-6 text-end">
+                            <div class="dropdown">
+                                <button class="btn btn-outline-primary dropdown-toggle" type="button" data-bs-toggle="dropdown">
+                                    <i class="ti ti-filter me-1"></i>Filter Status
+                                </button>
+                                <ul class="dropdown-menu">
+                                    <li><a class="dropdown-item" href="?status=all">Semua Status</a></li>
+                                    <li><a class="dropdown-item" href="?status=submitted">Menunggu</a></li>
+                                    <li><a class="dropdown-item" href="?status=approved">Disetujui</a></li>
+                                    <li><a class="dropdown-item" href="?status=rejected">Ditolak</a></li>
+                                </ul>
+                            </div>
+                        </div>
+                    </div>
                 </div>
             </div>
         </div>
@@ -28,60 +41,60 @@
     {{-- Statistics Cards --}}
     <div class="row g-3 mb-4">
         <div class="col-md-6 col-xl-3">
-            <div class="card">
+            <div class="card border-0 shadow-sm">
                 <div class="card-body">
-                    <div class="d-flex align-items-center">
-                        <div class="avtar avtar-s bg-light-primary me-3">
-                            <i class="ti ti-users f-18"></i>
-                        </div>
+                    <div class="d-flex align-items-center justify-content-between">
                         <div>
+                            <h6 class="mb-2 f-w-400 text-muted">Total Permintaan</h6>
                             <h4 class="mb-0">{{ $users->count() }}</h4>
-                            <p class="mb-0 text-muted f-14">Total Permintaan</p>
+                        </div>
+                        <div class="avtar avtar-s bg-light-primary">
+                            <i class="ti ti-users f-20"></i>
                         </div>
                     </div>
                 </div>
             </div>
         </div>
         <div class="col-md-6 col-xl-3">
-            <div class="card">
+            <div class="card border-0 shadow-sm">
                 <div class="card-body">
-                    <div class="d-flex align-items-center">
-                        <div class="avtar avtar-s bg-light-warning me-3">
-                            <i class="ti ti-clock f-18"></i>
-                        </div>
+                    <div class="d-flex align-items-center justify-content-between">
                         <div>
+                            <h6 class="mb-2 f-w-400 text-muted">Menunggu</h6>
                             <h4 class="mb-0">{{ $users->where('status', 'submitted')->count() }}</h4>
-                            <p class="mb-0 text-muted f-14">Menunggu</p>
+                        </div>
+                        <div class="avtar avtar-s bg-light-warning">
+                            <i class="ti ti-clock f-20"></i>
                         </div>
                     </div>
                 </div>
             </div>
         </div>
         <div class="col-md-6 col-xl-3">
-            <div class="card">
+            <div class="card border-0 shadow-sm">
                 <div class="card-body">
-                    <div class="d-flex align-items-center">
-                        <div class="avtar avtar-s bg-light-success me-3">
-                            <i class="ti ti-check f-18"></i>
-                        </div>
+                    <div class="d-flex align-items-center justify-content-between">
                         <div>
+                            <h6 class="mb-2 f-w-400 text-muted">Disetujui</h6>
                             <h4 class="mb-0">{{ $users->where('status', 'approved')->count() }}</h4>
-                            <p class="mb-0 text-muted f-14">Disetujui</p>
+                        </div>
+                        <div class="avtar avtar-s bg-light-success">
+                            <i class="ti ti-check f-20"></i>
                         </div>
                     </div>
                 </div>
             </div>
         </div>
         <div class="col-md-6 col-xl-3">
-            <div class="card">
+            <div class="card border-0 shadow-sm">
                 <div class="card-body">
-                    <div class="d-flex align-items-center">
-                        <div class="avtar avtar-s bg-light-danger me-3">
-                            <i class="ti ti-x f-18"></i>
-                        </div>
+                    <div class="d-flex align-items-center justify-content-between">
                         <div>
+                            <h6 class="mb-2 f-w-400 text-muted">Ditolak</h6>
                             <h4 class="mb-0">{{ $users->where('status', 'rejected')->count() }}</h4>
-                            <p class="mb-0 text-muted f-14">Ditolak</p>
+                        </div>
+                        <div class="avtar avtar-s bg-light-danger">
+                            <i class="ti ti-x f-20"></i>
                         </div>
                     </div>
                 </div>
@@ -90,16 +103,16 @@
     </div>
 
     {{-- Main Table --}}
-    <div class="card border-0">
-        <div class="card-header">
-            <h5 class="mb-0">
-                <i class="ti ti-user-plus me-2"></i>Daftar Permintaan Akun
+    <div class="card border-0 shadow-sm">
+        <div class="card-header bg-white border-0">
+            <h5 class="mb-0 fw-bold">
+                <i class="ti ti-user-plus me-2 text-primary"></i>Daftar Permintaan Akun
             </h5>
         </div>
         <div class="card-body p-0">
             @if($users->count() > 0)
                 <div class="table-responsive">
-                    <table class="table table-hover mb-0">
+                    <table class="table table-hover table-borderless mb-0">
                         <thead class="table-light">
                             <tr>
                                 <th class="border-top-0 ps-4">Pengguna</th>
@@ -201,7 +214,7 @@
                 </div>
 
                 {{-- Pagination Info --}}
-                <div class="card-footer bg-white border-top">
+                <div class="card-footer bg-light border-0">
                     <div class="row align-items-center">
                         <div class="col">
                             <small class="text-muted">
@@ -213,10 +226,10 @@
             @else
                 <div class="text-center py-5">
                     <div class="avtar avtar-xl bg-light-secondary mb-3 mx-auto">
-                        <i class="ti ti-user-plus f-24 text-muted"></i>
+                        <i class="ti ti-user-plus f-36 text-muted"></i>
                     </div>
                     <h5 class="mb-2">Tidak ada permintaan akun</h5>
-                    <p class="text-muted mb-0">Belum ada pengguna yang mengajukan permintaan akun baru</p>
+                    <p class="text-muted mb-4">Belum ada pengguna yang mengajukan permintaan akun baru</p>
                 </div>
             @endif
         </div>
@@ -228,7 +241,7 @@
     {{-- Approve Modal --}}
     <div class="modal fade" id="approveModal{{ $user->id }}" tabindex="-1">
         <div class="modal-dialog modal-dialog-centered">
-            <div class="modal-content">
+            <div class="modal-content border-0 shadow">
                 <div class="modal-header bg-light-success">
                     <h5 class="modal-title text-success">
                         <i class="ti ti-check-circle me-2"></i>Konfirmasi Persetujuan
@@ -271,7 +284,7 @@
     {{-- Reject Modal --}}
     <div class="modal fade" id="rejectModal{{ $user->id }}" tabindex="-1">
         <div class="modal-dialog modal-dialog-centered">
-            <div class="modal-content">
+            <div class="modal-content border-0 shadow">
                 <div class="modal-header bg-light-danger">
                     <h5 class="modal-title text-danger">
                         <i class="ti ti-x-circle me-2"></i>Konfirmasi Penolakan
@@ -314,9 +327,9 @@
     {{-- View Modal --}}
     <div class="modal fade" id="viewModal{{ $user->id }}" tabindex="-1">
         <div class="modal-dialog modal-lg modal-dialog-centered">
-            <div class="modal-content">
-                <div class="modal-header">
-                    <h5 class="modal-title">
+            <div class="modal-content border-0 shadow">
+                <div class="modal-header bg-light-primary">
+                    <h5 class="modal-title text-primary">
                         <i class="ti ti-user-circle me-2"></i>Detail Pengguna
                     </h5>
                     <button type="button" class="btn-close" data-bs-dismiss="modal"></button>
@@ -416,13 +429,13 @@
 {{-- Toast Notifications --}}
 @if(session('success'))
 <div class="position-fixed bottom-0 end-0 p-3" style="z-index: 11">
-    <div class="toast show" role="alert">
-        <div class="toast-header bg-success text-white">
+    <div class="toast show border-0 shadow-lg" role="alert">
+        <div class="toast-header bg-success text-white border-0">
             <i class="ti ti-check-circle me-2"></i>
             <strong class="me-auto">Berhasil</strong>
             <button type="button" class="btn-close btn-close-white" data-bs-dismiss="toast"></button>
         </div>
-        <div class="toast-body">
+        <div class="toast-body bg-white">
             {{ session('success') }}
         </div>
     </div>
@@ -431,13 +444,13 @@
 
 @if(session('error'))
 <div class="position-fixed bottom-0 end-0 p-3" style="z-index: 11">
-    <div class="toast show" role="alert">
-        <div class="toast-header bg-danger text-white">
+    <div class="toast show border-0 shadow-lg" role="alert">
+        <div class="toast-header bg-danger text-white border-0">
             <i class="ti ti-x-circle me-2"></i>
             <strong class="me-auto">Error</strong>
             <button type="button" class="btn-close btn-close-white" data-bs-dismiss="toast"></button>
         </div>
-        <div class="toast-body">
+        <div class="toast-body bg-white">
             {{ session('error') }}
         </div>
     </div>
