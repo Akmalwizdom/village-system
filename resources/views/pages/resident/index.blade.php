@@ -204,7 +204,7 @@
                                 </td>
                                 <td class="text-end">
                                     <div class="btn-group" role="group">
-                                        <a href="/resident/{{ $item->id }}/edit" class="btn btn-sm btn-outline-warning" title="Edit">
+                                        <a href="/resident/{{ $item->id }}/edit" class="btn btn-sm btn-outline-warning me-1" title="Edit">
                                             <i class="ti ti-edit"></i>
                                         </a>
                                         <button type="button" class="btn btn-sm btn-outline-danger" 

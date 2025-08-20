@@ -8,7 +8,7 @@
             <div class="card border-0 shadow-sm">
                 <div class="card-body">
                     <div class="row align-items-center">
-                        <div class="col-md-6">
+                        <div class="col-md-8">
                             <div class="d-flex align-items-center">
                                 <div class="avtar avtar-l bg-light-primary me-3">
                                     <i class="ti ti-users text-primary f-24"></i>
@@ -19,22 +19,13 @@
                                 </div>
                             </div>
                         </div>
-                        <div class="col-md-6">
-                            <div class="row g-2">
-                                <div class="col-md-8">
-                                    <div class="input-group">
-                                        <span class="input-group-text bg-light border-0">
-                                            <i class="ti ti-search text-muted"></i>
-                                        </span>
-                                        <input type="text" class="form-control border-0 bg-light" 
-                                               placeholder="Cari nama, email, atau telepon..." id="searchInput">
-                                    </div>
-                                </div>
-                                <div class="col-md-4">
-                                    <button class="btn btn-primary w-100" data-bs-toggle="modal" data-bs-target="#addUserModal">
-                                        <i class="ti ti-plus me-1"></i>Tambah Penduduk
-                                    </button>
-                                </div>
+                        <div class="col-md-4">
+                            <div class="input-group">
+                                <span class="input-group-text bg-light border-0">
+                                    <i class="ti ti-search text-muted"></i>
+                                </span>
+                                <input type="text" class="form-control border-0 bg-light" 
+                                       placeholder="Cari nama, email, atau telepon..." id="searchInput">
                             </div>
                         </div>
                     </div>
@@ -107,6 +98,27 @@
         </div>
     </div>
 
+    {{-- Bulk Actions Bar (Hidden by default) --}}
+    <div class="card border-0 shadow-sm mb-3" id="bulkActionsBar" style="display: none;">
+        <div class="card-body py-2">
+            <div class="row align-items-center">
+                <div class="col">
+                    <small class="text-muted">
+                        <span id="selectedCount">0</span> akun dipilih
+                    </small>
+                </div>
+                <div class="col-auto">
+                    <button type="button" class="btn btn-danger btn-sm me-2" id="bulkDeleteBtn" data-bs-toggle="modal" data-bs-target="#bulkDeleteModal">
+                        <i class="ti ti-trash me-1"></i>Hapus Terpilih
+                    </button>
+                    <button type="button" class="btn btn-secondary btn-sm" onclick="clearSelection()">
+                        <i class="ti ti-x me-1"></i>Batal
+                    </button>
+                </div>
+            </div>
+        </div>
+    </div>
+
     {{-- Main Table --}}
     <div class="card border-0 shadow-sm">
         <div class="card-header bg-white border-0">
@@ -115,19 +127,6 @@
                     <h5 class="mb-0 fw-bold">
                         <i class="ti ti-list me-2 text-primary"></i>Daftar Penduduk Terdaftar
                     </h5>
-                </div>
-                <div class="col-auto">
-                    <div class="dropdown">
-                        <button class="btn btn-outline-secondary btn-sm dropdown-toggle" type="button" data-bs-toggle="dropdown">
-                            <i class="ti ti-dots-vertical"></i>
-                        </button>
-                        <ul class="dropdown-menu dropdown-menu-end">
-                            <li><a class="dropdown-item" href="#"><i class="ti ti-download me-2"></i>Export Excel</a></li>
-                            <li><a class="dropdown-item" href="#"><i class="ti ti-file-text me-2"></i>Export PDF</a></li>
-                            <li><hr class="dropdown-divider"></li>
-                            <li><a class="dropdown-item" href="#"><i class="ti ti-refresh me-2"></i>Refresh</a></li>
-                        </ul>
-                    </div>
                 </div>
             </div>
         </div>
@@ -143,7 +142,7 @@
                                     </div>
                                 </th>
                                 <th class="border-top-0">Penduduk</th>
-                                <th class="border-top-0">Kontak</th>
+                                <th class="border-top-0">Email</th>
                                 <th class="border-top-0">Tanggal Bergabung</th>
                                 <th class="border-top-0 text-center">Status</th>
                                 <th class="border-top-0 text-center">Aktivitas Terakhir</th>
@@ -172,7 +171,7 @@
                                         </div>
                                         <div>
                                             <h6 class="mb-0 fw-bold">{{ $user->name }}</h6>
-                                            <small class="text-muted">ID: {{ str_pad($user->id, 4, '0', STR_PAD_LEFT) }}</small>
+                                            <small class="text-muted">ID: {{ $user->id }}</small>
                                         </div>
                                     </div>
                                 </td>
@@ -182,17 +181,6 @@
                                             <i class="ti ti-mail text-primary me-1 f-14"></i>
                                             <span class="text-dark f-14">{{ $user->email }}</span>
                                         </div>
-                                        @if($user->phone)
-                                            <div class="d-flex align-items-center">
-                                                <i class="ti ti-phone text-success me-1 f-14"></i>
-                                                <small class="text-muted">{{ $user->phone }}</small>
-                                            </div>
-                                        @else
-                                            <div class="d-flex align-items-center">
-                                                <i class="ti ti-phone-off text-muted me-1 f-14"></i>
-                                                <small class="text-muted">Tidak tersedia</small>
-                                            </div>
-                                        @endif
                                     </div>
                                 </td>
                                 <td>
@@ -230,41 +218,21 @@
                                 </td>
                                 <td class="text-center pe-4">
                                     <div class="btn-group btn-group-sm">
-                                        <button type="button" class="btn btn-outline-primary btn-sm"
+                                        <button type="button" class="btn btn-outline-primary btn-sm me-1"
                                                 data-bs-toggle="modal" data-bs-target="#viewModal{{ $user->id }}"
                                                 title="Lihat Detail">
                                             <i class="ti ti-eye"></i>
                                         </button>
-                                        <button type="button" class="btn btn-outline-warning btn-sm"
-                                                data-bs-toggle="modal" data-bs-target="#editModal{{ $user->id }}"
-                                                title="Edit">
-                                            <i class="ti ti-edit"></i>
+                                        <button type="button" class="btn btn-outline-danger btn-sm me-1" 
+                                                data-bs-toggle="modal" data-bs-target="#deleteModal{{ $user->id }}"
+                                                title="Hapus">
+                                            <i class="ti ti-trash"></i>
                                         </button>
-                                        <div class="btn-group btn-group-sm">
-                                            <button type="button" class="btn btn-outline-secondary btn-sm dropdown-toggle dropdown-toggle-split" 
-                                                    data-bs-toggle="dropdown" title="Opsi Lainnya">
-                                                <i class="ti ti-dots-vertical"></i>
-                                            </button>
-                                            <ul class="dropdown-menu dropdown-menu-end">
-                                                <li>
-                                                    <a class="dropdown-item" href="#">
-                                                        <i class="ti ti-message-circle me-2"></i>Kirim Pesan
-                                                    </a>
-                                                </li>
-                                                <li>
-                                                    <a class="dropdown-item" href="#">
-                                                        <i class="ti ti-shield-lock me-2"></i>Reset Password
-                                                    </a>
-                                                </li>
-                                                <li><hr class="dropdown-divider"></li>
-                                                <li>
-                                                    <a class="dropdown-item text-danger" href="#" 
-                                                       onclick="confirmDelete({{ $user->id }}, '{{ $user->name }}')">
-                                                        <i class="ti ti-trash me-2"></i>Hapus
-                                                    </a>
-                                                </li>
-                                            </ul>
-                                        </div>
+                                        <button type="button" class="btn btn-outline-secondary btn-sm me-1" 
+                                                data-bs-toggle="modal" data-bs-target="#deactivateModal{{ $user->id }}"
+                                                title="Nonaktifkan Akun">
+                                            <i class="ti ti-user-off"></i>
+                                        </button>
                                     </div>
                                 </td>
                             </tr>
@@ -277,22 +245,9 @@
                 <div class="card-footer bg-light border-0">
                     <div class="row align-items-center">
                         <div class="col-md-6">
-                            <div class="d-flex align-items-center">
-                                <small class="text-muted me-3">
-                                    Menampilkan {{ $users->count() }} dari {{ $users->count() }} penduduk
-                                </small>
-                                <div class="btn-group btn-group-sm" id="bulkActions" style="display: none;">
-                                    <button class="btn btn-outline-primary btn-sm">
-                                        <i class="ti ti-mail me-1"></i>Kirim Email
-                                    </button>
-                                    <button class="btn btn-outline-warning btn-sm">
-                                        <i class="ti ti-edit me-1"></i>Edit Batch
-                                    </button>
-                                    <button class="btn btn-outline-danger btn-sm">
-                                        <i class="ti ti-trash me-1"></i>Hapus
-                                    </button>
-                                </div>
-                            </div>
+                            <small class="text-muted">
+                                Menampilkan {{ $users->count() }} dari {{ $users->count() }} penduduk
+                            </small>
                         </div>
                         <div class="col-md-6 text-end">
                             <small class="text-muted">
@@ -308,15 +263,117 @@
                         <i class="ti ti-users f-36 text-muted"></i>
                     </div>
                     <h5 class="mb-2">Belum Ada Penduduk Terdaftar</h5>
-                    <p class="text-muted mb-4">Mulai tambahkan penduduk untuk mengelola data kependudukan</p>
-                    <button class="btn btn-primary" data-bs-toggle="modal" data-bs-target="#addUserModal">
-                        <i class="ti ti-plus me-1"></i>Tambah Penduduk Pertama
-                    </button>
+                    <p class="text-muted mb-4">Data penduduk akan muncul di sini setelah ditambahkan.</p>
                 </div>
             @endif
         </div>
     </div>
 </div>
+
+{{-- Bulk Delete Confirmation Modal --}}
+<div class="modal fade" id="bulkDeleteModal" tabindex="-1" aria-labelledby="bulkDeleteModalLabel" aria-hidden="true">
+    <div class="modal-dialog">
+        <div class="modal-content border-0 shadow">
+            <div class="modal-header bg-light-danger">
+                <h5 class="modal-title text-danger" id="bulkDeleteModalLabel">
+                    <i class="ti ti-trash me-2"></i>Konfirmasi Hapus Terpilih
+                </h5>
+                <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
+            </div>
+            <div class="modal-body">
+                <div class="text-center">
+                    <div class="avtar avtar-xl bg-light-danger text-danger mb-3 mx-auto">
+                        <i class="ti ti-trash f-24"></i>
+                    </div>
+                    <h6 class="mb-2">Hapus Akun Penduduk Terpilih</h6>
+                    <p class="text-muted mb-0">Apakah Anda yakin ingin menghapus <strong id="bulkDeleteCount">0</strong> akun penduduk yang dipilih?</p>
+                    <small class="text-danger">Tindakan ini tidak dapat dibatalkan!</small>
+                </div>
+            </div>
+            <div class="modal-footer">
+                <button type="button" class="btn btn-secondary" data-bs-dismiss="modal">Batal</button>
+                <form id="bulkDeleteForm" action="{{ route('users.bulkDestroy') }}" method="POST" class="d-inline">
+                    @csrf
+                    @method('DELETE')
+                    <input type="hidden" name="ids" id="bulkDeleteIds">
+                    <button type="submit" class="btn btn-danger">
+                        <i class="ti ti-trash me-1"></i>Hapus Terpilih
+                    </button>
+                </form>
+            </div>
+        </div>
+    </div>
+</div>
+
+{{-- Delete Confirmation Modals for each user --}}
+@foreach ($users as $user)
+    <div class="modal fade" id="deleteModal{{ $user->id }}" tabindex="-1" aria-labelledby="deleteModalLabel{{ $user->id }}" aria-hidden="true">
+        <div class="modal-dialog">
+            <div class="modal-content border-0 shadow">
+                <div class="modal-header bg-light-danger">
+                    <h5 class="modal-title text-danger" id="deleteModalLabel{{ $user->id }}">
+                        <i class="ti ti-trash me-2"></i>Konfirmasi Hapus
+                    </h5>
+                    <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
+                </div>
+                <div class="modal-body">
+                    <div class="text-center">
+                        <div class="avtar avtar-xl bg-light-danger text-danger mb-3 mx-auto">
+                            <i class="ti ti-trash f-24"></i>
+                        </div>
+                        <h6 class="mb-2">Hapus Akun Penduduk</h6>
+                        <p class="text-muted mb-0">Apakah Anda yakin ingin menghapus akun penduduk <strong>{{ $user->name }}</strong>?</p>
+                        <small class="text-danger">Tindakan ini tidak dapat dibatalkan!</small>
+                    </div>
+                </div>
+                <div class="modal-footer">
+                    <button type="button" class="btn btn-secondary" data-bs-dismiss="modal">Batal</button>
+                    <form action="{{ url('/users') }}/{{ $user->id }}" method="POST" class="d-inline">
+                        @method('DELETE')
+                        @csrf
+                        <button type="submit" class="btn btn-danger">
+                            <i class="ti ti-trash me-1"></i>Hapus
+                        </button>
+                    </form>
+                </div>
+            </div>
+        </div>
+    </div>
+
+    {{-- Deactivate Confirmation Modal --}}
+    <div class="modal fade" id="deactivateModal{{ $user->id }}" tabindex="-1" aria-labelledby="deactivateModalLabel{{ $user->id }}" aria-hidden="true">
+        <div class="modal-dialog">
+            <div class="modal-content border-0 shadow">
+                <div class="modal-header bg-light-warning">
+                    <h5 class="modal-title text-warning" id="deactivateModalLabel{{ $user->id }}">
+                        <i class="ti ti-user-off me-2"></i>Konfirmasi Nonaktifkan
+                    </h5>
+                    <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
+                </div>
+                <div class="modal-body">
+                    <div class="text-center">
+                        <div class="avtar avtar-xl bg-light-warning text-warning mb-3 mx-auto">
+                            <i class="ti ti-user-off f-24"></i>
+                        </div>
+                        <h6 class="mb-2">Nonaktifkan Akun Penduduk</h6>
+                        <p class="text-muted mb-0">Apakah Anda yakin ingin menonaktifkan akun penduduk <strong>{{ $user->name }}</strong>?</p>
+                        <small class="text-warning">Akun akan diubah statusnya menjadi nonaktif.</small>
+                    </div>
+                </div>
+                <div class="modal-footer">
+                    <button type="button" class="btn btn-secondary" data-bs-dismiss="modal">Batal</button>
+                    <form action="{{ url('/users') }}/{{ $user->id }}/deactivate" method="POST" class="d-inline">
+                        @csrf
+                        @method('PATCH')
+                        <button type="submit" class="btn btn-warning">
+                            <i class="ti ti-user-off me-1"></i>Nonaktifkan
+                        </button>
+                    </form>
+                </div>
+            </div>
+        </div>
+    </div>
+@endforeach
 
 {{-- View Detail Modals --}}
 @foreach ($users as $user)
@@ -336,7 +393,7 @@
                                 <span class="f-24 fw-bold">{{ strtoupper(substr($user->name, 0, 2)) }}</span>
                             </div>
                             <h6 class="mb-1">{{ $user->name }}</h6>
-                            <small class="text-muted">ID: {{ str_pad($user->id, 4, '0', STR_PAD_LEFT) }}</small>
+                            <small class="text-muted">ID: {{ $user->id }}</small>
                             <div class="mt-3">
                                 @if($user->status == 'approved')
                                     <span class="badge bg-light-success text-success border border-success px-3 py-2">
@@ -405,13 +462,6 @@
                     <button type="button" class="btn btn-secondary" data-bs-dismiss="modal">
                         <i class="ti ti-x me-1"></i>Tutup
                     </button>
-                    <button type="button" class="btn btn-warning" data-bs-dismiss="modal"
-                            data-bs-toggle="modal" data-bs-target="#editModal{{ $user->id }}">
-                        <i class="ti ti-edit me-1"></i>Edit
-                    </button>
-                    <button type="button" class="btn btn-primary">
-                        <i class="ti ti-message-circle me-1"></i>Kirim Pesan
-                    </button>
                 </div>
             </div>
         </div>
@@ -449,74 +499,78 @@
 </div>
 @endif
 
-@endsection
-
-@push('scripts')
 <script>
 document.addEventListener('DOMContentLoaded', function() {
-    // Auto dismiss toasts
-    var toasts = document.querySelectorAll('.toast');
-    toasts.forEach(function(toast) {
-        setTimeout(function() {
-            bootstrap.Toast.getOrCreateInstance(toast).hide();
-        }, 5000);
+    const selectAllCheckbox = document.getElementById('selectAll');
+    const userCheckboxes = document.querySelectorAll('.user-checkbox');
+    const bulkActionsBar = document.getElementById('bulkActionsBar');
+    const selectedCountSpan = document.getElementById('selectedCount');
+    const bulkDeleteBtn = document.getElementById('bulkDeleteBtn');
+
+    // Handle "Select All" checkbox
+    selectAllCheckbox.addEventListener('change', function() {
+        userCheckboxes.forEach(checkbox => {
+            checkbox.checked = this.checked;
+        });
+        updateBulkActionsVisibility();
+    });
+
+    // Handle individual checkboxes
+    userCheckboxes.forEach(checkbox => {
+        checkbox.addEventListener('change', function() {
+            updateSelectAllState();
+            updateBulkActionsVisibility();
+        });
+    });
+
+    // Update "Select All" state based on individual checkboxes
+    function updateSelectAllState() {
+        const checkedCount = document.querySelectorAll('.user-checkbox:checked').length;
+        selectAllCheckbox.checked = checkedCount === userCheckboxes.length;
+        selectAllCheckbox.indeterminate = checkedCount > 0 && checkedCount < userCheckboxes.length;
+    }
+
+    // Show/hide bulk actions bar
+    function updateBulkActionsVisibility() {
+        const checkedBoxes = document.querySelectorAll('.user-checkbox:checked');
+        if (checkedBoxes.length > 0) {
+            bulkActionsBar.style.display = 'block';
+            selectedCountSpan.textContent = checkedBoxes.length;
+        } else {
+            bulkActionsBar.style.display = 'none';
+        }
+    }
+
+    // Update bulk delete modal when opened
+    document.getElementById('bulkDeleteModal').addEventListener('show.bs.modal', function() {
+        const checkedBoxes = document.querySelectorAll('.user-checkbox:checked');
+        const userIds = Array.from(checkedBoxes).map(cb => cb.value);
+        
+        document.getElementById('bulkDeleteCount').textContent = checkedBoxes.length;
+        document.getElementById('bulkDeleteIds').value = JSON.stringify(userIds);
     });
 
     // Search functionality
     const searchInput = document.getElementById('searchInput');
-    const tableRows = document.querySelectorAll('.user-row');
-
-    searchInput.addEventListener('keyup', function() {
-        const searchTerm = this.value.toLowerCase();
-        
-        tableRows.forEach(function(row) {
-            const text = row.textContent.toLowerCase();
-            if (text.includes(searchTerm)) {
-                row.style.display = '';
-            } else {
-                row.style.display = 'none';
-            }
-        });
-    });
-
-    // Select all checkbox
-    const selectAllCheckbox = document.getElementById('selectAll');
-    const userCheckboxes = document.querySelectorAll('.user-checkbox');
-    const bulkActions = document.getElementById('bulkActions');
-
-    selectAllCheckbox.addEventListener('change', function() {
-        userCheckboxes.forEach(function(checkbox) {
-            checkbox.checked = selectAllCheckbox.checked;
-        });
-        toggleBulkActions();
-    });
-
-    userCheckboxes.forEach(function(checkbox) {
-        checkbox.addEventListener('change', function() {
-            toggleBulkActions();
+    if (searchInput) {
+        searchInput.addEventListener('input', function() {
+            const searchTerm = this.value.toLowerCase();
+            const rows = document.querySelectorAll('#usersTable tbody tr');
             
-            // Update select all checkbox
-            const checkedCount = document.querySelectorAll('.user-checkbox:checked').length;
-            selectAllCheckbox.indeterminate = checkedCount > 0 && checkedCount < userCheckboxes.length;
-            selectAllCheckbox.checked = checkedCount === userCheckboxes.length;
+            rows.forEach(row => {
+                const text = row.textContent.toLowerCase();
+                row.style.display = text.includes(searchTerm) ? '' : 'none';
+            });
         });
-    });
-
-    function toggleBulkActions() {
-        const checkedCount = document.querySelectorAll('.user-checkbox:checked').length;
-        if (checkedCount > 0) {
-            bulkActions.style.display = 'block';
-        } else {
-            bulkActions.style.display = 'none';
-        }
     }
 });
 
-function confirmDelete(userId, userName) {
-    if (confirm(`Apakah Anda yakin ingin menghapus akun ${userName}?`)) {
-        // Handle delete action here
-        console.log('Deleting user:', userId);
-    }
+// Clear selection
+function clearSelection() {
+    document.querySelectorAll('.user-checkbox').forEach(cb => cb.checked = false);
+    document.getElementById('selectAll').checked = false;
+    document.getElementById('bulkActionsBar').style.display = 'none';
 }
 </script>
-@endpush
+
+@endsection

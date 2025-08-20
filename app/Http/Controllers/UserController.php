@@ -42,4 +42,58 @@ class UserController extends Controller
             'users' => $users,
         ]);
     }
+
+    public function deactivateAccount($id)
+    {
+        try {
+            // Cari user berdasarkan ID
+            $user = User::findOrFail($id);
+            // Ubah status menjadi 'rejected' atau status lain yang menandakan nonaktif
+            $user->status = 'rejected';
+            $user->save();
+
+            // Redirect kembali dengan pesan sukses
+            return back()->with('success', 'Akun penduduk berhasil dinonaktifkan.');
+        } catch (\Exception $e) {
+            // Redirect kembali dengan pesan error jika terjadi masalah
+            return back()->with('error', 'Gagal menonaktifkan akun: ' . $e->getMessage());
+        }
+    }
+
+    public function destroy($id)
+    {
+        try {
+            // Cari dan hapus user berdasarkan ID
+            $user = User::findOrFail($id);
+            $user->delete();
+
+            // Redirect kembali dengan pesan sukses
+            return back()->with('success', 'Akun penduduk berhasil dihapus.');
+        } catch (\Exception $e) {
+            // Redirect kembali dengan pesan error
+            return back()->with('error', 'Gagal menghapus akun: ' . $e->getMessage());
+        }
+    }
+
+    public function bulkDestroy(Request $request)
+    {
+        // Validasi input, pastikan 'ids' adalah array dan tidak kosong
+        $request->validate([
+            'ids' => 'required|array',
+            'ids.*' => 'exists:users,id',
+        ]);
+
+        try {
+            // Hitung jumlah ID yang akan dihapus
+            $count = count($request->ids);
+            // Hapus semua user yang ID-nya ada di dalam array 'ids'
+            User::whereIn('id', $request->ids)->delete();
+
+            // Redirect kembali dengan pesan sukses
+            return back()->with('success', "$count akun penduduk berhasil dihapus.");
+        } catch (\Exception $e) {
+            // Redirect kembali dengan pesan error
+            return back()->with('error', 'Gagal menghapus akun terpilih: ' . $e->getMessage());
+        }
+    }
 }

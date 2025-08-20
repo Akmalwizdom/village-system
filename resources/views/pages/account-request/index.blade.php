@@ -340,6 +340,7 @@
                             <div class="avtar avtar-xl bg-light-primary text-primary mb-3 mx-auto">
                                 <i class="ti ti-user f-24"></i>
                             </div>
+                            <div class="mt-3">
                             @switch($user->status)
                                 @case('submitted')
                                     <span class="badge bg-warning">Menunggu Persetujuan</span>
@@ -351,6 +352,7 @@
                                     <span class="badge bg-danger">Telah Ditolak</span>
                                     @break
                             @endswitch
+                            </div>
                         </div>
                         <div class="col-md-8">
                             <div class="row mb-3">

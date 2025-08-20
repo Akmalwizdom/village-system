@@ -28,4 +28,19 @@ Route::get('/account-list', [UserController::class, 'accountListView'])->middlew
 Route::get('/account-request', [UserController::class, 'accountRequestView'])->middleware('role:Admin');
 Route::post('/account-request/approval/{id}', [UserController::class, 'accountRequestApproval'])->middleware('role:Admin');
 
+Route::middleware(['auth'])->group(function () {
+    // ...
+    Route::get('/account-list', [UserController::class, 'accountListView'])->name('users.list');
+    
+    // Route untuk menonaktifkan akun
+    Route::patch('/users/{id}/deactivate', [UserController::class, 'deactivateAccount'])->name('users.deactivate');
+    
+    // Route untuk menghapus satu akun
+    Route::delete('/users/{id}', [UserController::class, 'destroy'])->name('users.destroy');
+    
+    // Route untuk menghapus akun secara massal
+    Route::delete('/users/bulk-destroy', [UserController::class, 'bulkDestroy'])->name('users.bulkDestroy');
+    // ...
+});
+
 
