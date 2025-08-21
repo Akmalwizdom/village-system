@@ -223,11 +223,6 @@
                                                 title="Lihat Detail">
                                             <i class="ti ti-eye"></i>
                                         </button>
-                                        <button type="button" class="btn btn-outline-danger btn-sm me-1" 
-                                                data-bs-toggle="modal" data-bs-target="#deleteModal{{ $user->id }}"
-                                                title="Hapus">
-                                            <i class="ti ti-trash"></i>
-                                        </button>
                                         <button type="button" class="btn btn-outline-secondary btn-sm me-1" 
                                                 data-bs-toggle="modal" data-bs-target="#deactivateModal{{ $user->id }}"
                                                 title="Nonaktifkan Akun">
@@ -305,41 +300,8 @@
     </div>
 </div>
 
-{{-- Delete Confirmation Modals for each user --}}
+{{-- Modals for each user --}}
 @foreach ($users as $user)
-    <div class="modal fade" id="deleteModal{{ $user->id }}" tabindex="-1" aria-labelledby="deleteModalLabel{{ $user->id }}" aria-hidden="true">
-        <div class="modal-dialog">
-            <div class="modal-content border-0 shadow">
-                <div class="modal-header bg-light-danger">
-                    <h5 class="modal-title text-danger" id="deleteModalLabel{{ $user->id }}">
-                        <i class="ti ti-trash me-2"></i>Konfirmasi Hapus
-                    </h5>
-                    <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
-                </div>
-                <div class="modal-body">
-                    <div class="text-center">
-                        <div class="avtar avtar-xl bg-light-danger text-danger mb-3 mx-auto">
-                            <i class="ti ti-trash f-24"></i>
-                        </div>
-                        <h6 class="mb-2">Hapus Akun Penduduk</h6>
-                        <p class="text-muted mb-0">Apakah Anda yakin ingin menghapus akun penduduk <strong>{{ $user->name }}</strong>?</p>
-                        <small class="text-danger">Tindakan ini tidak dapat dibatalkan!</small>
-                    </div>
-                </div>
-                <div class="modal-footer">
-                    <button type="button" class="btn btn-secondary" data-bs-dismiss="modal">Batal</button>
-                    <form action="{{ url('/users') }}/{{ $user->id }}" method="POST" class="d-inline">
-                        @method('DELETE')
-                        @csrf
-                        <button type="submit" class="btn btn-danger">
-                            <i class="ti ti-trash me-1"></i>Hapus
-                        </button>
-                    </form>
-                </div>
-            </div>
-        </div>
-    </div>
-
     {{-- Deactivate Confirmation Modal --}}
     <div class="modal fade" id="deactivateModal{{ $user->id }}" tabindex="-1" aria-labelledby="deactivateModalLabel{{ $user->id }}" aria-hidden="true">
         <div class="modal-dialog">
@@ -373,10 +335,8 @@
             </div>
         </div>
     </div>
-@endforeach
 
-{{-- View Detail Modals --}}
-@foreach ($users as $user)
+    {{-- View Detail Modal --}}
     <div class="modal fade" id="viewModal{{ $user->id }}" tabindex="-1">
         <div class="modal-dialog modal-lg modal-dialog-centered">
             <div class="modal-content border-0 shadow">

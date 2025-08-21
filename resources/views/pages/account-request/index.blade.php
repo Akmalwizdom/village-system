@@ -192,18 +192,23 @@
                                         </div>
                                     @else
                                         <div class="btn-group btn-group-sm">
-                                            <button type="button" class="btn btn-outline-info btn-sm"
+                                            <button type="button" class="btn btn-outline-info btn-sm me-1"
                                                     data-bs-toggle="modal" data-bs-target="#viewModal{{ $user->id }}"
                                                     title="Lihat Detail">
                                                 <i class="ti ti-eye"></i>
                                             </button>
                                             @if($user->status == 'rejected')
-                                                <button type="button" class="btn btn-outline-success btn-sm"
+                                                <button type="button" class="btn btn-outline-success btn-sm me-1"
                                                         data-bs-toggle="modal" data-bs-target="#approveModal{{ $user->id }}"
                                                         title="Setujui">
                                                     <i class="ti ti-check"></i>
                                                 </button>
                                             @endif
+                                            <button type="button" class="btn btn-outline-danger btn-sm me-1" 
+                                                    data-bs-toggle="modal" data-bs-target="#deleteModal{{ $user->id }}"
+                                                    title="Hapus">
+                                                <i class="ti ti-trash"></i>
+                                            </button>
                                         </div>
                                     @endif
                                 </td>
@@ -317,6 +322,40 @@
                         <input type="hidden" name="status" value="rejected">
                         <button type="submit" class="btn btn-danger">
                             <i class="ti ti-x me-1"></i>Ya, Tolak
+                        </button>
+                    </form>
+                </div>
+            </div>
+        </div>
+    </div>
+
+    {{-- Delete Confirmation Modal --}}
+    <div class="modal fade" id="deleteModal{{ $user->id }}" tabindex="-1" aria-labelledby="deleteModalLabel{{ $user->id }}" aria-hidden="true">
+        <div class="modal-dialog">
+            <div class="modal-content border-0 shadow">
+                <div class="modal-header bg-light-danger">
+                    <h5 class="modal-title text-danger" id="deleteModalLabel{{ $user->id }}">
+                        <i class="ti ti-trash me-2"></i>Konfirmasi Hapus
+                    </h5>
+                    <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
+                </div>
+                <div class="modal-body">
+                    <div class="text-center">
+                        <div class="avtar avtar-xl bg-light-danger text-danger mb-3 mx-auto">
+                            <i class="ti ti-trash f-24"></i>
+                        </div>
+                        <h6 class="mb-2">Hapus Akun Penduduk</h6>
+                        <p class="text-muted mb-0">Apakah Anda yakin ingin menghapus akun penduduk <strong>{{ $user->name }}</strong>?</p>
+                        <small class="text-danger">Tindakan ini tidak dapat dibatalkan!</small>
+                    </div>
+                </div>
+                <div class="modal-footer">
+                    <button type="button" class="btn btn-secondary" data-bs-dismiss="modal">Batal</button>
+                    <form action="{{ url('/users') }}/{{ $user->id }}" method="POST" class="d-inline">
+                        @method('DELETE')
+                        @csrf
+                        <button type="submit" class="btn btn-danger">
+                            <i class="ti ti-trash me-1"></i>Hapus
                         </button>
                     </form>
                 </div>
