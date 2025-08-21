@@ -16,6 +16,7 @@
 <link rel="stylesheet" href="{{ asset('template/dist/assets/fonts/material.css') }}" >
 <link rel="stylesheet" href="{{ asset('template/dist/assets/css/style.css') }}" id="main-style-link" >
 <link rel="stylesheet" href="{{ asset('template/dist/assets/css/style-preset.css') }}" >
+<script src="https://cdn.jsdelivr.net/npm/sweetalert2@11"></script>
 
 </head>
 <body data-pc-preset="preset-1" data-pc-direction="ltr" data-pc-theme="light">
@@ -86,5 +87,6 @@
       </div>
     </div>
   </div>
+  @stack('scripts')
   </body>
 </html>

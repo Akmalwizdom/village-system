@@ -65,8 +65,14 @@
                             </div>
                             <div class="form-group mb-3">
                                 <label class="form-label">Password</label>
-                                <input type="password" class="form-control" id="inputPassword" name="password"
-                                    placeholder="Password">
+                                <div class="input-group">
+                                    <input type="password" class="form-control" id="inputPassword" name="password"
+                                        placeholder="Password">
+                                    <span class="input-group-text" onclick="togglePassword('inputPassword')"
+                                        style="cursor: pointer;">
+                                        <i class="fas fa-eye-slash" id="inputPassword_icon"></i>
+                                    </span>
+                                </div>
                             </div>
                             <div class="d-flex mt-1 justify-content-between">
                                 <div class="form-check">
@@ -165,6 +171,16 @@
         font_change("Public-Sans");
     </script>
 
+    <script>
+        window.togglePassword = function(fieldId) {
+            const field = document.getElementById(fieldId);
+            const icon = document.getElementById(fieldId + '_icon');
+            const isPassword = field.type === 'password';
+            field.type = isPassword ? 'text' : 'password';
+            icon.classList.toggle('fa-eye', !isPassword);
+            icon.classList.toggle('fa-eye-slash', isPassword);
+        }
+    </script>
 
 
 </body>

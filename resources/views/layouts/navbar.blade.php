@@ -177,21 +177,13 @@
         </ul>
         <div class="tab-content" id="mysrpTabContent">
           <div class="tab-pane fade show active" id="drp-tab-1" role="tabpanel" aria-labelledby="drp-t1" tabindex="0">
-            <a href="#!" class="dropdown-item">
-              <i class="ti ti-edit-circle"></i>
-              <span>Edit Profile</span>
-            </a>
-            <a href="#!" class="dropdown-item">
+            <a href="/profile" class="dropdown-item">
               <i class="ti ti-user"></i>
               <span>View Profile</span>
             </a>
-            <a href="#!" class="dropdown-item">
-              <i class="ti ti-clipboard-list"></i>
-              <span>Social Profile</span>
-            </a>
-            <a href="#!" class="dropdown-item">
-              <i class="ti ti-wallet"></i>
-              <span>Billing</span>
+            <a href="/change-password" class="dropdown-item">
+              <i class="ti ti-key"></i>
+              <span>Change Password</span>
             </a>
             <a href="#" class="dropdown-item" data-bs-toggle="modal" data-bs-target="#logoutModal">
               <i class="ti ti-power"></i>

@@ -6,9 +6,9 @@ use App\Http\Controllers\UserController;
 use Illuminate\Support\Facades\Route;
 
 
-Route::get('/', [AuthController::class, 'login']);
+Route::get('/', [AuthController::class, 'login'])->name('login');
 Route::post('/login', [AuthController::class, 'authenticate']);
-Route::post('/logout', [AuthController::class, 'logout']);
+Route::post('/logout', [AuthController::class, 'logout'])->name('logout');
 Route::get('/register', [AuthController::class, 'registerView']);
 Route::post('/register', [AuthController::class, 'register']);
 
@@ -43,4 +43,22 @@ Route::middleware(['auth'])->group(function () {
     // ...
 });
 
+// Route untuk menampilkan halaman profil pengguna
+Route::get('/profile', [UserController::class, 'profileView'])
+    ->middleware('role:Admin,User')
+    ->name('profile.index'); // Nama rute ditambahkan
 
+// Route untuk memproses pembaruan data profil
+Route::put('/profile/{id}', [UserController::class, 'updateProfile'])
+    ->middleware('role:Admin,User')
+    ->name('profile.update'); // Metode diubah ke PUT dan nama rute ditambahkan
+
+// Route untuk menampilkan halaman ganti password
+Route::get('/change-password', [UserController::class, 'changePasswordView'])
+    ->middleware('role:Admin,User')
+    ->name('profile.change-password'); // Nama rute ditambahkan
+
+// Route untuk memproses pembaruan password
+Route::put('/change-password', [UserController::class, 'updatePassword'])
+    ->middleware('role:Admin,User')
+    ->name('profile.update-password'); 
