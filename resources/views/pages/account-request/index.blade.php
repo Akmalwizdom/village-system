@@ -244,47 +244,50 @@
 {{-- Modals for each user --}}
 @foreach ($users as $user)
     {{-- Approve Modal --}}
-    <div class="modal fade" id="approveModal{{ $user->id }}" tabindex="-1">
-        <div class="modal-dialog modal-dialog-centered">
-            <div class="modal-content border-0 shadow">
-                <div class="modal-header bg-light-success">
-                    <h5 class="modal-title text-success">
-                        <i class="ti ti-check-circle me-2"></i>Konfirmasi Persetujuan
-                    </h5>
-                    <button type="button" class="btn-close" data-bs-dismiss="modal"></button>
-                </div>
-                <div class="modal-body text-center">
-                    <div class="avtar avtar-xl bg-light-success text-success mb-3 mx-auto">
-                        <i class="ti ti-check f-24"></i>
+
+{{-- Di dalam @foreach ($users as $user) --}}
+<div class="modal fade" id="approveModal{{ $user->id }}" tabindex="-1">
+    <div class="modal-dialog modal-dialog-centered">
+        <div class="modal-content border-0 shadow">
+            <div class="modal-header bg-light-success">
+                <h5 class="modal-title text-success">
+                    <i class="ti ti-check-circle me-2"></i>Konfirmasi Persetujuan
+                </h5>
+                <button type="button" class="btn-close" data-bs-dismiss="modal"></button>
+            </div>
+            {{-- Tambahkan form di sini --}}
+            <form action="/account-request/approval/{{ $user->id }}" method="POST">
+                @csrf
+                <div class="modal-body">
+                    <p class="text-muted text-center">Anda akan menyetujui permintaan akun dari <strong>{{ $user->name }}</strong>.</p>
+                    
+                    {{-- TAMBAHKAN BAGIAN INI --}}
+                    <div class="mb-3">
+                        <label for="resident_id_{{ $user->id }}" class="form-label fw-bold">Hubungkan ke Penduduk:</label>
+                        <select class="form-select" name="resident_id" id="resident_id_{{ $user->id }}" required>
+                            <option value="" selected disabled>-- Pilih Penduduk --</option>
+                            @foreach ($residents as $resident)
+                                <option value="{{ $resident->id }}">
+                                    {{ $resident->name }} (NIK: {{ $resident->nik }})
+                                </option>
+                            @endforeach
+                        </select>
+                        <small class="text-muted">Pilih data penduduk yang akan dihubungkan dengan akun ini.</small>
                     </div>
-                    <h6 class="mb-2">Setujui Permintaan Akun?</h6>
-                    <p class="text-muted mb-3">Anda akan menyetujui permintaan akun dari:</p>
-                    <div class="bg-light rounded p-3 mb-3">
-                        <div class="d-flex align-items-center justify-content-center">
-                            <div class="avtar avtar-s bg-primary me-2">
-                                <i class="ti ti-user f-16"></i>
-                            </div>
-                            <div class="text-start">
-                                <div class="f-w-600">{{ $user->name }}</div>
-                                <small class="text-muted">{{ $user->email }}</small>
-                            </div>
-                        </div>
-                    </div>
-                    <small class="text-success">Pengguna akan mendapatkan akses penuh ke sistem</small>
+                    {{-- BATAS AKHIR PENAMBAHAN --}}
+
                 </div>
                 <div class="modal-footer">
+                    <input type="hidden" name="status" value="approved">
                     <button type="button" class="btn btn-light" data-bs-dismiss="modal">Batal</button>
-                    <form action="/account-request/approval/{{ $user->id }}" method="POST" class="d-inline">
-                        @csrf
-                        <input type="hidden" name="status" value="approved">
-                        <button type="submit" class="btn btn-success">
-                            <i class="ti ti-check me-1"></i>Ya, Setujui
-                        </button>
-                    </form>
+                    <button type="submit" class="btn btn-success">
+                        <i class="ti ti-check me-1"></i>Ya, Setujui & Hubungkan
+                    </button>
                 </div>
-            </div>
+            </form>
         </div>
     </div>
+</div>
 
     {{-- Reject Modal --}}
     <div class="modal fade" id="rejectModal{{ $user->id }}" tabindex="-1">

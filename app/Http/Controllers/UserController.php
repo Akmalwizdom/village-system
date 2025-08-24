@@ -2,6 +2,7 @@
 
 namespace App\Http\Controllers;
 
+use App\Models\Resident;
 use App\Models\User;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Auth;
@@ -11,28 +12,44 @@ class UserController extends Controller
 {
     public function accountRequestView(Request $request)
     {
-        // Memulai query builder untuk model User
-        $query = User::query();
+        $request->validate([
+            'status' => 'sometimes|in:submitted,approved,rejected',
+        ]);
 
-        // Cek jika ada parameter 'status' di URL dan nilainya valid
-        if ($request->has('status') && in_array($request->status, ['submitted', 'approved', 'rejected'])) {
-            // Terapkan filter where ke query
-            $query->where('status', $request->status);
-        }
+        $residents = Resident::where('user_id', null)->get();
 
-        // Ambil hasil query
-        $users = $query->latest()->get();
+        $users = User::query()
+            ->when($request->status, function ($query, $status) {
+                return $query->where('status', $status);
+            })->latest()->get();
 
         return view('pages.account-request.index', [
             'users' => $users,
+            'residents' => $residents,
         ]);
     }
 
     public function accountRequestApproval($id, Request $request)
     {
+        // Validasi input dari form
+        $request->validate([
+            'status' => 'required|in:approved,rejected',
+            // Jika statusnya 'approved', resident_id wajib diisi
+            'resident_id' => 'required_if:status,approved|exists:residents,id',
+        ]);
+
         $user = User::findOrFail($id);
-        $user->status = $request->input('status') == 'approved' ? 'approved' : 'rejected';
+        $user->status = $request->status;
         $user->save();
+
+        // Jika disetujui, update kolom 'user_id' di tabel residents
+        if ($request->status == 'approved') {
+            $resident = Resident::find($request->resident_id);
+            if ($resident) {
+                $resident->user_id = $user->id;
+                $resident->save();
+            }
+        }
 
         return back()->with('success', 'Permintaan akun berhasil diperbarui.');
     }
