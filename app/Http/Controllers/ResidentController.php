@@ -10,7 +10,8 @@ class ResidentController extends Controller
 {
     public function index()
     {
-        $residents = Resident::with('user')->latest()->get();
+        $perPage = request('per_page', 10);
+        $residents = Resident::with('user')->paginate($perPage);
 
         return view('pages.resident.index', [
             'residents' => $residents,

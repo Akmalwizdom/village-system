@@ -28,7 +28,7 @@
                         <div class="d-flex align-items-center justify-content-between">
                             <div>
                                 <h6 class="mb-2 f-w-400 text-muted">Total Penduduk</h6>
-                                <h4 class="mb-0">{{ $residents->count() }}</h4>
+                                <h4 class="mb-0">{{ $residents->total() }}</h4>
                             </div>
                             <div class="avtar avtar-s bg-light-primary">
                                 <i class="ti ti-users f-20"></i>
@@ -73,7 +73,6 @@
                         <div class="d-flex align-items-center justify-content-between">
                             <div>
                                 <h6 class="mb-2 f-w-400 text-muted">Status Aktif</h6>
-                                {{-- MODIFIKASI: Menggunakan value 'active' --}}
                                 <h4 class="mb-0">{{ $residents->where('status', 'active')->count() }}</h4>
                             </div>
                             <div class="avtar avtar-s bg-light-info">
@@ -83,7 +82,9 @@
                     </div>
                 </div>
             </div>
+        </div>
 
+        <div class="row">
             <div class="col-md-12">
                 <div class="card border-0 shadow-sm">
                     <div class="card-header bg-white border-0 d-flex align-items-center justify-content-between">
@@ -117,7 +118,7 @@
                                     @forelse ($residents as $item)
                                         <tr>
                                             <td>
-                                                {{ $loop->iteration }}
+                                                {{ $loop->iteration + $residents->firstItem() - 1 }}
                                             </td>
                                             <td>
                                                 <span class="text-primary f-w-600">{{ $item->nik }}</span>
@@ -128,12 +129,10 @@
                                                 </div>
                                             </td>
                                             <td>
-                                                {{-- MODIFIKASI: Kondisi berdasarkan value 'L' --}}
                                                 <span
                                                     class="badge {{ $item->gender == 'male' ? 'bg-light-success border border-success' : 'bg-light-warning border border-warning' }}">
                                                     <i
                                                         class="ti {{ $item->gender == 'male' ? 'ti-user' : 'ti-user-circle' }} me-1"></i>
-                                                    {{-- MODIFIKASI: Menampilkan teks berdasarkan value --}}
                                                     @if ($item->gender == 'male')
                                                         Laki-laki
                                                     @else
@@ -156,7 +155,6 @@
                                             <td>{{ $item->religion }}</td>
                                             <td>
                                                 <span class="badge bg-light-info border border-info">
-                                                    {{-- MODIFIKASI (Penyempurnaan): Menampilkan teks berdasarkan value --}}
                                                     @switch($item->marital_status)
                                                         @case('single')
                                                             Belum Menikah
@@ -191,10 +189,8 @@
                                             </td>
                                             <td>
                                                 <span class="d-flex align-items-center gap-2">
-                                                    {{-- MODIFIKASI: Kondisi warna berdasarkan value --}}
                                                     <i
                                                         class="fas fa-circle {{ $item->status == 'active' ? 'text-success' : 'text-danger' }} f-10"></i>
-                                                    {{-- MODIFIKASI: Menampilkan teks berdasarkan value --}}
                                                     @switch($item->status)
                                                         @case('active')
                                                             Aktif
@@ -204,13 +200,12 @@
                                                             Pindah
                                                         @break
 
-                                                        @case('divorced')
-                                                            {{-- Sesuai value 'Almarhum' di create.blade.php --}}
+                                                        @case('deceased')
                                                             Almarhum
                                                         @break
 
                                                         @default
-                                                            {{ $item->status }}
+                                                            {{ ucfirst($item->status) }}
                                                     @endswitch
                                                 </span>
                                             </td>
@@ -237,6 +232,7 @@
                                             </td>
                                         </tr>
 
+                                        {{-- Delete Modal --}}
                                         <div class="modal fade" id="deleteModal{{ $item->id }}" tabindex="-1"
                                             aria-labelledby="deleteModalLabel{{ $item->id }}" aria-hidden="true">
                                             <div class="modal-dialog">
@@ -277,50 +273,46 @@
                                                 </div>
                                             </div>
                                         </div>
-                                        @empty
-                                            <tr>
-                                                <td colspan="11" class="text-center py-4">
-                                                    <div class="d-flex flex-column align-items-center">
-                                                        <div class="avtar avtar-xl bg-light-secondary mb-3 mx-auto">
-                                                            <i class="ti ti-users f-36 text-muted"></i>
-                                                        </div>
-                                                        <h6 class="mb-1">Tidak ada data penduduk</h6>
-                                                        <p class="text-muted mb-4">Belum ada data penduduk yang terdaftar dalam
-                                                            sistem</p>
-                                                        <a href="/resident/create" class="btn btn-primary">
-                                                            <i class="ti ti-plus me-1"></i>Tambah Penduduk Pertama
-                                                        </a>
+                                    @empty
+                                        <tr>
+                                            <td colspan="12" class="text-center py-4">
+                                                <div class="d-flex flex-column align-items-center">
+                                                    <div class="avtar avtar-xl bg-light-secondary mb-3 mx-auto">
+                                                        <i class="ti ti-users f-36 text-muted"></i>
                                                     </div>
-                                                </td>
-                                            </tr>
-                                        @endforelse
-                                    </tbody>
-                                </table>
-                            </div>
-
-                            @if ($residents->count() > 10)
-                                <div class="card-footer bg-light border-0">
-                                    <div class="row align-items-center">
-                                        <div class="col-md-6">
-                                            <small class="text-muted">
-                                                Menampilkan {{ $residents->firstItem() ?? 0 }} sampai
-                                                {{ $residents->lastItem() ?? 0 }}
-                                                dari {{ $residents->total() ?? $residents->count() }} data
-                                            </small>
-                                        </div>
-                                        <div class="col-md-6 text-end">
-                                            @if (method_exists($residents, 'links'))
-                                                {{ $residents->links() }}
-                                            @endif
-                                        </div>
-                                    </div>
-                                </div>
-                            @endif
+                                                    <h6 class="mb-1">Tidak ada data penduduk</h6>
+                                                    <p class="text-muted mb-4">Belum ada data penduduk yang terdaftar dalam
+                                                        sistem</p>
+                                                    <a href="/resident/create" class="btn btn-primary">
+                                                        <i class="ti ti-plus me-1"></i>Tambah Penduduk Pertama
+                                                    </a>
+                                                </div>
+                                            </td>
+                                        </tr>
+                                    @endforelse
+                                </tbody>
+                            </table>
                         </div>
                     </div>
+
+                    {{-- Pagination Footer --}}
+                    @if ($residents->hasPages())
+                        <div class="card-footer bg-light border-0">
+                            <div class="row align-items-center">
+                                <div class="col-md-6">
+                                    <small class="text-muted">
+                                        Menampilkan {{ $residents->firstItem() }} sampai
+                                        {{ $residents->lastItem() }} dari {{ $residents->total() }} data
+                                    </small>
+                                </div>
+                                <div class="col-md-6 d-flex justify-content-end">
+                                    {{ $residents->appends(request()->query())->links('pagination::bootstrap-4') }}
+                                </div>
+                            </div>
+                        </div>
+                    @endif
                 </div>
             </div>
-        </div>
         </div>
 
         {{-- Modal Detail Akun untuk setiap penduduk yang memiliki akun --}}
@@ -516,4 +508,5 @@
                 </div>
             @endif
         @endforeach
-    @endsection
+    </div>
+@endsection
