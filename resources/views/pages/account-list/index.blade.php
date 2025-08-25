@@ -237,21 +237,21 @@
                 </div>
 
                 {{-- Pagination & Actions Bar --}}
-                <div class="card-footer bg-light border-0">
-                    <div class="row align-items-center">
-                        <div class="col-md-6">
-                            <small class="text-muted">
-                                Menampilkan {{ $users->count() }} dari {{ $users->count() }} penduduk
-                            </small>
-                        </div>
-                        <div class="col-md-6 text-end">
-                            <small class="text-muted">
-                                <i class="ti ti-clock me-1"></i>
-                                Terakhir diperbarui: {{ now()->format('d M Y, H:i') }} WIB
-                            </small>
+                @if ($users->hasPages())
+                    <div class="card-footer bg-light border-0">
+                        <div class="row align-items-center">
+                            <div class="col-md-6">
+                                <small class="text-muted">
+                                    Menampilkan {{ $users->firstItem() }} -
+                                    {{ $users->lastItem() }} dari {{ $users->total() }} data
+                                </small>
+                            </div>
+                            <div class="col-md-6 d-flex justify-content-end">
+                                {{ $users->appends(request()->query())->links('pagination::bootstrap-5') }}
+                            </div>
                         </div>
                     </div>
-                </div>
+                @endif
             @else
                 <div class="text-center py-5">
                     <div class="avtar avtar-xl bg-light-secondary mb-3 mx-auto">

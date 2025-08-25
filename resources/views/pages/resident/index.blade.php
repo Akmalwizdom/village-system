@@ -306,7 +306,7 @@
                                     </small>
                                 </div>
                                 <div class="col-md-6 d-flex justify-content-end">
-                                    {{ $residents->appends(request()->query())->links('pagination::bootstrap-4') }}
+                                    {{ $residents->appends(request()->query())->links('pagination::bootstrap-5') }}
                                 </div>
                             </div>
                         </div>
