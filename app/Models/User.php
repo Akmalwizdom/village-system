@@ -48,6 +48,6 @@ class User extends Authenticatable
 
     public function resident()
     {
-        return $this->hasMany(Resident::class);
+        return $this->hasOne(Resident::class);
     }
 }

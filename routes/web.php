@@ -3,6 +3,7 @@
 use App\Http\Controllers\AuthController;
 use App\Http\Controllers\ResidentController;
 use App\Http\Controllers\UserController;
+use App\Http\Controllers\ComplaintController;
 use Illuminate\Support\Facades\Route;
 
 
@@ -61,4 +62,13 @@ Route::get('/change-password', [UserController::class, 'changePasswordView'])
 // Route untuk memproses pembaruan password
 Route::put('/change-password', [UserController::class, 'updatePassword'])
     ->middleware('role:Admin,User')
-    ->name('profile.update-password'); 
+    ->name('profile.update-password');
+
+Route::middleware(['auth'])->group(function () {
+    Route::get('/complaint', [ComplaintController::class, 'index']);
+    Route::get('/complaint/create', [ComplaintController::class, 'create']);
+    Route::post('/complaint', [ComplaintController::class, 'store']);
+    Route::get('/complaint/{id}/edit', [ComplaintController::class, 'edit']);
+    Route::put('/complaint/{id}', [ComplaintController::class, 'update']);
+    Route::delete('/complaint/{id}', [ComplaintController::class, 'destroy']);
+});

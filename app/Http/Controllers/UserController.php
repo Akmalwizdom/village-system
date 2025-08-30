@@ -57,7 +57,7 @@ class UserController extends Controller
     public function accountListView()
     {
         $perPage = request('per_page', 10);
-        $users = User::where('role_id', 2)->paginate($perPage);
+        $users = User::with('resident')->paginate($perPage);
         
         return view('pages.account-list.index', [
             'users' => $users,
