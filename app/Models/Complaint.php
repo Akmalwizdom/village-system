@@ -20,6 +20,6 @@ class Complaint extends Model
 
     public function getReportDateLabelAtAttribute()
     {
-        return \Carbon\Carbon::parse($this->report_date)->fromat('d M Y, H:i:s');
+        return \Carbon\Carbon::parse($this->report_date)->format('d M Y, H:i:s');
     }
 }

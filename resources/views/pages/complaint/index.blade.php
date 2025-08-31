@@ -63,9 +63,22 @@
                                         </td>
                                         <td>
                                             @if ($item->photo_proof)
-                                                <a href="{{ Storage::url($item->photo_proof) }}" target="_blank" class="btn btn-sm btn-outline-info">
-                                                    <i class="ti ti-photo me-1"></i> Lihat Foto
-                                                </a>
+                                                <div class="text-center">
+                                                    <img src="{{ Storage::url($item->photo_proof) }}" 
+                                                         alt="Foto Bukti" 
+                                                         width="80" 
+                                                         height="60" 
+                                                         class="img-thumbnail"
+                                                         style="object-fit: cover;">
+                                                    <br>
+                                                    <small>
+                                                        <a href="{{ Storage::url($item->photo_proof) }}" 
+                                                           target="_blank" 
+                                                           class="text-primary text-decoration-none">
+                                                            <i class="ti ti-external-link"></i> Detail
+                                                        </a>
+                                                    </small>
+                                                </div>
                                             @else
                                                 <span class="text-muted">-</span>
                                             @endif
