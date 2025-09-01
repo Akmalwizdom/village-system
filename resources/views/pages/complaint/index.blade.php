@@ -12,8 +12,14 @@
                             <i class="ti ti-message-report text-primary f-24"></i>
                         </div>
                         <div>
-                            <h4 class="mb-1 text-dark fw-bold">Daftar Aduan Anda</h4>
-                            <p class="text-muted mb-0">Kelola dan pantau semua aduan yang telah Anda buat</p>
+                            {{-- Judul dinamis berdasarkan role pengguna --}}
+                            @if (Auth::user()->role_id == 1)
+                                <h4 class="mb-1 text-dark fw-bold">Daftar Seluruh Aduan</h4>
+                                <p class="text-muted mb-0">Pantau semua aduan yang dibuat oleh penduduk</p>
+                            @else
+                                <h4 class="mb-1 text-dark fw-bold">Daftar Aduan Anda</h4>
+                                <p class="text-muted mb-0">Kelola dan pantau semua aduan yang telah Anda buat</p>
+                            @endif
                         </div>
                     </div>
                 </div>
@@ -28,9 +34,12 @@
                     <h5 class="mb-0 fw-bold">
                         <i class="ti ti-list me-2 text-primary"></i>Data Aduan
                     </h5>
-                    <a href="/complaint/create" class="btn btn-primary">
-                        <i class="ti ti-plus me-1"></i>Buat Aduan Baru
-                    </a>
+                    {{-- Tombol "Buat Aduan" hanya untuk penduduk --}}
+                    @if (Auth::user()->role_id != 1)
+                        <a href="/complaint/create" class="btn btn-primary">
+                            <i class="ti ti-plus me-1"></i>Buat Aduan Baru
+                        </a>
+                    @endif
                 </div>
                 <div class="card-body">
                     <div class="table-responsive">
@@ -38,12 +47,19 @@
                             <thead class="table-light">
                                 <tr>
                                     <th class="border-top-0">NO</th>
+                                    {{-- Kolom tambahan "Nama Pelapor" hanya untuk admin --}}
+                                    @if (Auth::user()->role_id == 1)
+                                        <th class="border-top-0">Nama Pelapor</th>
+                                    @endif
                                     <th class="border-top-0">Judul Aduan</th>
                                     <th class="border-top-0">Isi Aduan</th>
                                     <th class="border-top-0">Status</th>
                                     <th class="border-top-0">Foto Bukti</th>
                                     <th class="border-top-0">Tanggal Laporan</th>
-                                    <th class="border-top-0 text-center">AKSI</th>
+                                    {{-- Kolom "Aksi" hanya untuk penduduk --}}
+                                    @if (Auth::user()->role_id != 1)
+                                        <th class="border-top-0 text-center">Aksi</th>
+                                    @endif
                                 </tr>
                             </thead>
                             <tbody>
@@ -52,6 +68,13 @@
                                         <td>
                                             {{ $loop->iteration + $complaints->firstItem() - 1 }}
                                         </td>
+                                        {{-- Menampilkan nama pelapor, hanya untuk admin --}}
+                                        @if (Auth::user()->role_id == 1)
+                                            <td>
+                                                {{-- Mengambil nama dari relasi 'resident' yang sudah di-load di controller --}}
+                                                {{ $item->resident->name ?? 'Data Penduduk Tidak Ditemukan' }}
+                                            </td>
+                                        @endif
                                         <td>
                                             <span class="f-w-600">{{ $item->title }}</span>
                                         </td>
@@ -86,22 +109,25 @@
                                         <td>
                                             {{ \Carbon\Carbon::parse($item->created_at)->format('d M Y, H:i') }}
                                         </td>
-                                        <td class="text-center">
-                                            <div class="btn-group" role="group">
-                                                <a href="/complaint/{{ $item->id }}/edit"
-                                                    class="btn btn-sm btn-outline-warning" title="Edit">
-                                                    <i class="ti ti-edit"></i>
-                                                </a>
-                                                <button type="button" class="btn btn-sm btn-outline-danger"
-                                                    data-bs-toggle="modal"
-                                                    data-bs-target="#deleteModal{{ $item->id }}" title="Hapus">
-                                                    <i class="ti ti-trash"></i>
-                                                </button>
-                                            </div>
-                                        </td>
+                                        {{-- Tombol aksi hanya untuk penduduk --}}
+                                        @if (Auth::user()->role_id != 1)
+                                            <td class="text-center">
+                                                <div class="btn-group" role="group">
+                                                    <a href="/complaint/{{ $item->id }}/edit"
+                                                        class="btn btn-sm btn-outline-warning me-1" title="Edit">
+                                                        <i class="ti ti-edit"></i>
+                                                    </a>
+                                                    <button type="button" class="btn btn-sm btn-outline-danger"
+                                                        data-bs-toggle="modal"
+                                                        data-bs-target="#deleteModal{{ $item->id }}" title="Hapus">
+                                                        <i class="ti ti-trash"></i>
+                                                    </button>
+                                                </div>
+                                            </td>
+                                        @endif
                                     </tr>
 
-                                    {{-- Delete Modal --}}
+                                    {{-- Modal Hapus (hanya relevan untuk penduduk, tapi tidak masalah tetap di sini) --}}
                                     <div class="modal fade" id="deleteModal{{ $item->id }}" tabindex="-1"
                                         aria-labelledby="deleteModalLabel{{ $item->id }}" aria-hidden="true">
                                         <div class="modal-dialog">
@@ -134,17 +160,24 @@
                                         </div>
                                     </div>
                                 @empty
+                                    {{-- colspan disesuaikan menjadi 8 untuk mengakomodasi kolom tambahan admin --}}
                                     <tr>
-                                        <td colspan="7" class="text-center py-5">
+                                        <td colspan="8" class="text-center py-5">
                                             <div class="d-flex flex-column align-items-center">
                                                 <div class="avtar avtar-xl bg-light-secondary mb-3">
                                                     <i class="ti ti-file-off f-36 text-muted"></i>
                                                 </div>
-                                                <h6 class="mb-1">Anda belum memiliki aduan</h6>
-                                                <p class="text-muted mb-4">Buat aduan pertama Anda sekarang</p>
-                                                <a href="/complaint/create" class="btn btn-primary">
-                                                    <i class="ti ti-plus me-1"></i>Buat Aduan
-                                                </a>
+                                                {{-- Pesan dinamis jika tidak ada aduan --}}
+                                                @if (Auth::user()->role_id == 1)
+                                                    <h6 class="mb-1">Belum Ada Aduan</h6>
+                                                    <p class="text-muted mb-4">Saat ini belum ada aduan yang dibuat oleh penduduk.</p>
+                                                @else
+                                                    <h6 class="mb-1">Anda belum memiliki aduan</h6>
+                                                    <p class="text-muted mb-4">Buat aduan pertama Anda sekarang</p>
+                                                    <a href="/complaint/create" class="btn btn-primary">
+                                                        <i class="ti ti-plus me-1"></i>Buat Aduan
+                                                    </a>
+                                                @endif
                                             </div>
                                         </td>
                                     </tr>

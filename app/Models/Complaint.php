@@ -3,10 +3,16 @@
 namespace App\Models;
 
 use Illuminate\Database\Eloquent\Model;
+use App\Models\Resident;
 
 class Complaint extends Model
 {
     protected $guarded = [];
+
+    public function resident()
+    {
+        return $this->belongsTo(Resident::class, 'resident_id');
+    }
 
     public function getStatusLabelAttribute()
     {

@@ -23,32 +23,39 @@
                 @if (Auth::check() && Auth::user()->role_id == 1)
                     <li class="pc-item">
                         <a href="/resident" class="pc-link">
-                            <span class="pc-micon"><i class="ti ti-typography"></i></span>
+                            <span class="pc-micon"><i class="ti ti-users"></i></span>
                             <span class="pc-mtext">Penduduk</span>
                         </a>
                     </li>
 
                     <li class="pc-item">
                         <a href="/account-request" class="pc-link">
-                            <span class="pc-micon"><i class="ti ti-typography"></i></span>
+                            <span class="pc-micon"><i class="ti ti-user-check"></i></span>
                             <span class="pc-mtext">Permintaan Akun</span>
                         </a>
                     </li>
 
                     <li class="pc-item">
                         <a href="/account-list" class="pc-link">
-                            <span class="pc-micon"><i class="ti ti-typography"></i></span>
+                            <span class="pc-micon"><i class="ti ti-list-check"></i></span>
                             <span class="pc-mtext">Daftar Akun</span>
                         </a>
                     </li>
-                @endif
 
-                <li class="pc-item">
-                    <a href="/complaint" class="pc-link">
-                        <span class="pc-micon"><i class="ti ti-typography"></i></span>
-                        <span class="pc-mtext">Pengaduan</span>
-                    </a>
-                </li>
+                    <li class="pc-item">
+                        <a href="/complaint" class="pc-link">
+                            <span class="pc-micon"><i class="ti ti-message-report"></i></span>
+                            <span class="pc-mtext">Aduan Warga</span>
+                        </a>
+                    </li>
+                @else
+                    <li class="pc-item">
+                        <a href="/complaint" class="pc-link">
+                            <span class="pc-micon"><i class="ti ti-message-report"></i></span>
+                            <span class="pc-mtext">Pengaduan</span>
+                        </a>
+                    </li>
+                @endif
             </ul>
         </div>
     </div>
