@@ -5,6 +5,7 @@ namespace App\Http\Controllers;
 use App\Models\Complaint;
 use Illuminate\Support\Facades\Storage;
 use Illuminate\Support\Facades\Auth;
+use Illuminate\Validation\Rule;
 use Illuminate\Http\Request;
 
 class ComplaintController extends Controller
@@ -123,5 +124,22 @@ class ComplaintController extends Controller
         $complaint->delete();
 
         return redirect('/complaint')->with('success', 'Aduan berhasil dihapus.');
+    }
+
+    public function updateStatus(Request $request, $id)
+    {
+        if (Auth::user()->role_id != 1) {
+            abort(403, 'Akses ditolak: Hanya admin yang dapat mengubah status aduan.');
+        }
+        $request->validate([
+            'status' => ['required', 'string', Rule::in(['new', 'processing', 'completed'])],
+        ]);
+
+        $complaint = Complaint::findOrFail($id);
+
+        $complaint->status = $request->input('status');
+        $complaint->save();
+
+        return redirect('/complaint')->with('success', 'Status aduan berhasil diperbarui.');
     }
 }

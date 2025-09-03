@@ -71,4 +71,5 @@ Route::middleware(['auth'])->group(function () {
     Route::get('/complaint/{id}/edit', [ComplaintController::class, 'edit']);
     Route::put('/complaint/{id}', [ComplaintController::class, 'update']);
     Route::delete('/complaint/{id}', [ComplaintController::class, 'destroy']);
+    Route::patch('/complaint/{id}/update-status', [ComplaintController::class, 'updateStatus']);
 });
