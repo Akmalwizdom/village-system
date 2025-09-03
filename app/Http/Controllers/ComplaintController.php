@@ -3,6 +3,7 @@
 namespace App\Http\Controllers;
 
 use App\Models\Complaint;
+use App\Models\Role; 
 use Illuminate\Support\Facades\Storage;
 use Illuminate\Support\Facades\Auth;
 use Illuminate\Validation\Rule;
@@ -14,7 +15,7 @@ class ComplaintController extends Controller
     {
         $user = Auth::user();
 
-        if ($user->role_id == 1) {
+        if ($user->role_id == Role::ROLE_ADMIN) {
             $complaints = Complaint::with('resident')->latest()->paginate(10);
         } else {
             if (!$user->resident) {
@@ -29,7 +30,7 @@ class ComplaintController extends Controller
 
     public function create()
     {
-        if (Auth::user()->role_id == 1) {
+        if (Auth::user()->role_id == Role::ROLE_ADMIN) {
             abort(403, 'Akses ditolak: Admin tidak dapat membuat aduan.');
         }
         return view('pages.complaint.create');
@@ -37,7 +38,7 @@ class ComplaintController extends Controller
 
     public function store(Request $request)
     {
-        if (Auth::user()->role_id == 1) {
+        if (Auth::user()->role_id == Role::ROLE_ADMIN) {
             abort(403, 'Akses ditolak: Admin tidak dapat membuat aduan.');
         }
 
@@ -65,7 +66,7 @@ class ComplaintController extends Controller
 
     public function edit($id)
     {
-        if (Auth::user()->role_id == 1) {
+        if (Auth::user()->role_id == Role::ROLE_ADMIN) {
             abort(403, 'Akses ditolak: Admin tidak dapat mengubah aduan.');
         }
 
@@ -78,7 +79,7 @@ class ComplaintController extends Controller
 
     public function update(Request $request, $id)
     {
-        if (Auth::user()->role_id == 1) {
+        if (Auth::user()->role_id == Role::ROLE_ADMIN) {
             abort(403, 'Akses ditolak: Admin tidak dapat mengubah aduan.');
         }
 
@@ -96,7 +97,6 @@ class ComplaintController extends Controller
         $complaint->content = $request->input('content');
 
         if ($request->hasFile('photo_proof')) {
-            // Hapus foto lama jika ada
             if ($complaint->photo_proof) {
                 Storage::delete($complaint->photo_proof);
             }
@@ -109,7 +109,7 @@ class ComplaintController extends Controller
 
     public function destroy($id)
     {
-        if (Auth::user()->role_id == 1) {
+        if (Auth::user()->role_id == Role::ROLE_ADMIN) {
             abort(403, 'Akses ditolak: Admin tidak dapat menghapus aduan.');
         }
         
@@ -128,7 +128,7 @@ class ComplaintController extends Controller
 
     public function updateStatus(Request $request, $id)
     {
-        if (Auth::user()->role_id != 1) {
+        if (Auth::user()->role_id != Role::ROLE_ADMIN) {
             abort(403, 'Akses ditolak: Hanya admin yang dapat mengubah status aduan.');
         }
         $request->validate([
