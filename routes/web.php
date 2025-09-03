@@ -4,6 +4,7 @@ use App\Http\Controllers\AuthController;
 use App\Http\Controllers\ResidentController;
 use App\Http\Controllers\UserController;
 use App\Http\Controllers\ComplaintController;
+use App\Http\Controllers\NotificationController;
 use Illuminate\Support\Facades\Route;
 
 
@@ -73,3 +74,5 @@ Route::middleware(['auth'])->group(function () {
     Route::delete('/complaint/{id}', [ComplaintController::class, 'destroy']);
     Route::patch('/complaint/{id}/update-status', [ComplaintController::class, 'updateStatus']);
 });
+
+Route::post('/notifications/{notification}/read', [NotificationController::class, 'markAsRead'])->name('notifications.read');

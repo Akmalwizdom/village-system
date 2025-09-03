@@ -1,6 +1,5 @@
 <div class="me-auto pc-mob-drp">
     <ul class="list-unstyled">
-        <!-- ======= Menu collapse Icon ===== -->
         <li class="pc-h-item pc-sidebar-collapse">
             <a href="#" class="pc-head-link ms-0" id="sidebar-hide">
                 <i class="ti ti-menu-2"></i>
@@ -33,9 +32,11 @@
         </li>
     </ul>
 </div>
-<!-- [Mobile Media Block end] -->
 <div class="ms-auto">
     <ul class="list-unstyled">
+        {{-- Hanya tampilkan blok notifikasi jika pengguna adalah penduduk --}}
+        @if(Auth::check() && Auth::user()->role_id == \App\Models\Role::ROLE_USER)
+
         {{-- [ NOTIFICATION DROPDOWN START ] --}}
         <li class="dropdown pc-h-item">
             <a class="pc-head-link dropdown-toggle arrow-none me-0" data-bs-toggle="dropdown" href="#"
@@ -47,20 +48,17 @@
                 @endif
             </a>
             <div class="dropdown-menu dropdown-notification dropdown-menu-end pc-h-dropdown">
+                {{-- ... isi dropdown notifikasi Anda tetap sama ... --}}
                 <div class="dropdown-header d-flex align-items-center justify-content-between">
                     <h5 class="m-0">Notifications</h5>
-                    {{-- Jika perlu, tambahkan link untuk menandai semua sudah dibaca --}}
-                    {{-- <a href="#!" class="pc-head-link bg-transparent">Mark as read</a> --}}
                 </div>
                 <div class="dropdown-divider"></div>
                 <div class="dropdown-header px-0 text-wrap header-notification-scroll position-relative"
                     style="max-height: calc(100vh - 215px)">
                     <div class="list-group list-group-flush w-100">
-
-                        {{-- Loop melalui notifikasi dan tampilkan --}}
                         @forelse ($notifications as $notification)
-                            <a class="list-group-item list-group-item-action" href="{{ url('/complaint') }}">
-                                {{-- Arahkan ke halaman aduan --}}
+                            <a class="list-group-item list-group-item-action notification-item"
+                                href="{{ url('/complaint') }}" data-id="{{ $notification->id }}">
                                 <div class="d-flex">
                                     <div class="flex-shrink-0">
                                         <div class="user-avtar bg-light-success"><i class="ti ti-check"></i></div>
@@ -68,37 +66,38 @@
                                     <div class="flex-grow-1 ms-1">
                                         <span
                                             class="float-end text-muted">{{ $notification->created_at->diffForHumans() }}</span>
-                                        <p class="text-body mb-1"><b>{{ $notification->data['notification_title'] ?? 'Status Aduan Diperbarui' }}</b></p>
+                                        <p class="text-body mb-1">
+                                            <b>{{ $notification->data['notification_title'] ?? 'Status Aduan Diperbarui' }}</b>
                                         </p>
                                         <span class="text-muted">{{ $notification->data['message'] }}</span>
                                     </div>
                                 </div>
                             </a>
                         @empty
-                            {{-- Tampilkan pesan jika tidak ada notifikasi --}}
                             <div class="list-group-item">
                                 <div class="text-center">
                                     <p class="text-muted my-2">Tidak ada notifikasi baru.</p>
                                 </div>
                             </div>
                         @endforelse
-
                     </div>
                 </div>
                 <div class="dropdown-divider"></div>
                 <div class="text-center py-2">
-                    <a href="#!" class="link-primary">View all</a> {{-- Ganti #! dengan link ke halaman semua notifikasi --}}
+                    <a href="#!" class="link-primary">View all</a>
                 </div>
             </div>
         </li>
         {{-- [ NOTIFICATION DROPDOWN END ] --}}
+        @endif
 
         <li class="dropdown pc-h-item header-user-profile">
             <a class="pc-head-link dropdown-toggle arrow-none me-0" data-bs-toggle="dropdown" href="#"
                 role="button" aria-haspopup="false" data-bs-auto-close="outside" aria-expanded="false">
                 <img src="{{ asset('template/dist/assets/images/user/avatar-2.jpg') }}" alt="user-image"
                     class="user-avtar">
-                <span>@auth
+                <span>
+                    @auth
                         {{ Auth::user()->name }}
                     @else
                         Guest
@@ -122,9 +121,9 @@
                 </div>
                 <ul class="nav drp-tabs nav-fill nav-tabs" id="mydrpTab" role="tablist">
                     <li class="nav-item" role="presentation">
-                        <button class="nav-link active" id="drp-t1" data-bs-toggle="tab" data-bs-target="#drp-tab-1"
-                            type="button" role="tab" aria-controls="drp-tab-1" aria-selected="true"><i
-                                class="ti ti-user"></i> Profile</button>
+                        <button class="nav-link active" id="drp-t1" data-bs-toggle="tab"
+                            data-bs-target="#drp-tab-1" type="button" role="tab" aria-controls="drp-tab-1"
+                            aria-selected="true"><i class="ti ti-user"></i> Profile</button>
                     </li>
                     <li class="nav-item" role="presentation">
                         <button class="nav-link" id="drp-t2" data-bs-toggle="tab" data-bs-target="#drp-tab-2"
@@ -133,8 +132,8 @@
                     </li>
                 </ul>
                 <div class="tab-content" id="mysrpTabContent">
-                    <div class="tab-pane fade show active" id="drp-tab-1" role="tabpanel" aria-labelledby="drp-t1"
-                        tabindex="0">
+                    <div class="tab-pane fade show active" id="drp-tab-1" role="tabpanel"
+                        aria-labelledby="drp-t1" tabindex="0">
                         <a href="/profile" class="dropdown-item">
                             <i class="ti ti-user"></i>
                             <span>View Profile</span>
@@ -177,3 +176,33 @@
         </li>
     </ul>
 </div>
+
+@push('scripts')
+<script>
+document.addEventListener('DOMContentLoaded', function () {
+    document.querySelectorAll('.notification-item').forEach(item => {
+        item.addEventListener('click', function (event) {
+            // Hentikan navigasi link untuk sementara
+            event.preventDefault();
+
+            const notificationId = this.dataset.id;
+            const redirectUrl = this.href;
+            // Ambil CSRF token dari meta tag
+            const csrfToken = document.querySelector('meta[name="csrf-token"]').getAttribute('content');
+
+            // Kirim request ke server untuk menandai notifikasi sebagai "dibaca"
+            fetch(`/notifications/${notificationId}/read`, {
+                method: 'POST',
+                headers: {
+                    'Content-Type': 'application/json',
+                    'X-CSRF-TOKEN': csrfToken
+                },
+            })
+            .finally(() => {
+                window.location.href = redirectUrl;
+            });
+        });
+    });
+});
+</script>
+@endpush
