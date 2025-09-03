@@ -3,7 +3,9 @@
 namespace App\Http\Controllers;
 
 use App\Models\Complaint;
-use App\Models\Role; 
+use App\Models\Role;
+use App\Models\User;
+use App\Notifications\ComplaintStatusChanged;
 use Illuminate\Support\Facades\Storage;
 use Illuminate\Support\Facades\Auth;
 use Illuminate\Validation\Rule;
@@ -136,9 +138,16 @@ class ComplaintController extends Controller
         ]);
 
         $complaint = Complaint::findOrFail($id);
+        $oldStatus = $complaint->status_label;
 
         $complaint->status = $request->input('status');
         $complaint->save();
+
+        $newStatus = $complaint->status_label;
+
+        User::where('id', $complaint->resident->user_id)
+            ->firstOrFail()
+            ->notify(new ComplaintStatusChanged($complaint, $oldStatus, $newStatus));
 
         return redirect('/complaint')->with('success', 'Status aduan berhasil diperbarui.');
     }
