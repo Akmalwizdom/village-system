@@ -14,9 +14,9 @@ Route::post('/logout', [AuthController::class, 'logout'])->name('logout');
 Route::get('/register', [AuthController::class, 'registerView']);
 Route::post('/register', [AuthController::class, 'register']);
 
-Route::get('/dashboard', function () {
-    return view('pages.dashboard');
-})->middleware('role:Admin,User');
+Route::get('/dashboard', [App\Http\Controllers\DashboardController::class, 'index'])
+    ->middleware('role:Admin,User')
+    ->name('dashboard');
 
 Route::get('/resident', [ResidentController::class, 'index'])->middleware('role:Admin');
 Route::get('/resident/create', [ResidentController::class, 'create'])->middleware('role:Admin');

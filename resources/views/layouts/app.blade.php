@@ -16,11 +16,14 @@
 <link rel="stylesheet" href="{{ asset('template/dist/assets/fonts/fontawesome.css') }}" >
 <link rel="stylesheet" href="{{ asset('template/dist/assets/fonts/material.css') }}" >
 <link rel="stylesheet" href="{{ asset('template/dist/assets/css/style.css') }}" id="main-style-link" >
-<link rel="stylesheet" href="{{ asset('template/dist/assets/css/style-preset.css') }}" >
+<link rel="stylesheet" href="{{ asset('template/dist/assets/css/style-preset.css') }}">
+<!-- SiDesa Custom Theme -->
+<link rel="stylesheet" href="{{ asset('css/sidesa-theme.css') }}">
 <script src="https://cdn.jsdelivr.net/npm/sweetalert2@11"></script>
-
+<!-- Force Dark Mode -->
+<script>document.documentElement.setAttribute('data-pc-theme', 'dark');</script>
 </head>
-<body data-pc-preset="preset-1" data-pc-direction="ltr" data-pc-theme="light">
+<body data-pc-preset="preset-sidesa" data-pc-direction="ltr" data-pc-theme="dark">
   <div class="loader-bg">
   <div class="loader-track">
     <div class="loader-fill"></div>
@@ -48,12 +51,6 @@
   <script src="{{ asset('template/dist/assets/js/fonts/custom-font.js') }}"></script>
   <script src="{{ asset('template/dist/assets/js/pcoded.js') }}"></script>
   <script src="{{ asset('template/dist/assets/js/plugins/feather.min.js') }}"></script>
-
-  <script>layout_change('light');</script>
-  <script>change_box_container('false');</script>
-  <script>layout_rtl_change('false');</script>
-  <script>preset_change("preset-1");</script>
-  <script>font_change("Public-Sans");</script>
 
   <div class="modal fade" id="logoutModal" tabindex="-1" aria-labelledby="logoutModalLabel" aria-hidden="true">
     <div class="modal-dialog modal-dialog-centered">
