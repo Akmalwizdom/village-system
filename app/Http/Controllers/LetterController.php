@@ -161,15 +161,15 @@ class LetterController extends Controller
 
         $letter->load(['template', 'resident']);
         
-        // Generate QR Code as base64 image
-        $qrCode = base64_encode(QrCode::format('png')
+        // Generate QR Code as SVG (no Imagick required)
+        $qrCode = QrCode::format('svg')
             ->size(100)
-            ->generate($letter->getVerificationUrl()));
+            ->generate($letter->getVerificationUrl());
         
         // Replace QR placeholder in content
         $content = str_replace(
             '{{qr_code}}', 
-            '<img src="data:image/png;base64,' . $qrCode . '" style="width: 100px; height: 100px;">', 
+            '<div style="width: 100px; height: 100px;">' . $qrCode . '</div>', 
             $letter->generated_content
         );
 
@@ -196,15 +196,15 @@ class LetterController extends Controller
 
         $letter->load(['template', 'resident']);
         
-        // Generate QR Code as base64 image
-        $qrCode = base64_encode(QrCode::format('png')
+        // Generate QR Code as SVG (no Imagick required)
+        $qrCode = QrCode::format('svg')
             ->size(100)
-            ->generate($letter->getVerificationUrl()));
+            ->generate($letter->getVerificationUrl());
         
         // Replace QR placeholder in content
         $content = str_replace(
             '{{qr_code}}', 
-            '<img src="data:image/png;base64,' . $qrCode . '" style="width: 100px; height: 100px;">', 
+            '<div style="width: 100px; height: 100px;">' . $qrCode . '</div>', 
             $letter->generated_content
         );
 
