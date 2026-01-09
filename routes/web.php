@@ -80,3 +80,22 @@ Route::middleware('auth')->group(function () {
     Route::post('/notifications/{id}/read', [NotificationController::class, 'markAsRead'])->name('notifications.markAsRead');
     Route::post('/notifications/mark-all-read', [NotificationController::class, 'markAllAsRead'])->name('notifications.markAllRead');
 });
+
+// Letter Routes (Modul Surat)
+use App\Http\Controllers\LetterController;
+
+Route::middleware(['auth'])->group(function () {
+    Route::get('/letter', [LetterController::class, 'index'])->name('letter.index');
+    Route::get('/letter/create', [LetterController::class, 'create'])->name('letter.create');
+    Route::post('/letter', [LetterController::class, 'store'])->name('letter.store');
+    Route::get('/letter/{letter}', [LetterController::class, 'show'])->name('letter.show');
+    Route::get('/letter/{letter}/preview', [LetterController::class, 'preview'])->name('letter.preview');
+    Route::get('/letter/{letter}/download', [LetterController::class, 'download'])->name('letter.download');
+    
+    // Admin only routes
+    Route::post('/letter/{letter}/approve', [LetterController::class, 'approve'])->name('letter.approve')->middleware('role:Admin');
+    Route::post('/letter/{letter}/reject', [LetterController::class, 'reject'])->name('letter.reject')->middleware('role:Admin');
+});
+
+// Public verification route (no auth required)
+Route::get('/verify-letter/{qrCode}', [LetterController::class, 'verify'])->name('letter.verify');

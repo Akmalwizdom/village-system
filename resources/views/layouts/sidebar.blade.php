@@ -48,11 +48,25 @@
                             <span class="pc-mtext">Aduan Warga</span>
                         </a>
                     </li>
+
+                    <li class="pc-item">
+                        <a href="/letter" class="pc-link">
+                            <span class="pc-micon"><i class="ti ti-file-text"></i></span>
+                            <span class="pc-mtext">Surat</span>
+                        </a>
+                    </li>
                 @else
                     <li class="pc-item">
                         <a href="/complaint" class="pc-link">
                             <span class="pc-micon"><i class="ti ti-message-report"></i></span>
                             <span class="pc-mtext">Pengaduan</span>
+                        </a>
+                    </li>
+
+                    <li class="pc-item">
+                        <a href="/letter" class="pc-link">
+                            <span class="pc-micon"><i class="ti ti-file-text"></i></span>
+                            <span class="pc-mtext">Surat</span>
                         </a>
                     </li>
                 @endif
