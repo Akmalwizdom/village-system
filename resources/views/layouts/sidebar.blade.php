@@ -55,6 +55,13 @@
                             <span class="pc-mtext">Surat</span>
                         </a>
                     </li>
+
+                    <li class="pc-item">
+                        <a href="/finance" class="pc-link">
+                            <span class="pc-micon"><i class="ti ti-report-money"></i></span>
+                            <span class="pc-mtext">Keuangan</span>
+                        </a>
+                    </li>
                 @else
                     <li class="pc-item">
                         <a href="/complaint" class="pc-link">

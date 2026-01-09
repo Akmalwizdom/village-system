@@ -99,3 +99,18 @@ Route::middleware(['auth'])->group(function () {
 
 // Public verification route (no auth required)
 Route::get('/verify-letter/{qrCode}', [LetterController::class, 'verify'])->name('letter.verify');
+
+// Finance Routes (Modul Keuangan) - Admin Only
+use App\Http\Controllers\FinanceController;
+
+Route::middleware(['auth', 'role:Admin'])->prefix('finance')->name('finance.')->group(function () {
+    Route::get('/', [FinanceController::class, 'dashboard'])->name('dashboard');
+    Route::get('/transactions', [FinanceController::class, 'index'])->name('index');
+    Route::get('/create', [FinanceController::class, 'create'])->name('create');
+    Route::post('/', [FinanceController::class, 'store'])->name('store');
+    Route::get('/{transaction}/edit', [FinanceController::class, 'edit'])->name('edit');
+    Route::put('/{transaction}', [FinanceController::class, 'update'])->name('update');
+    Route::delete('/{transaction}', [FinanceController::class, 'destroy'])->name('destroy');
+    Route::get('/report', [FinanceController::class, 'report'])->name('report');
+    Route::get('/export-pdf', [FinanceController::class, 'exportPdf'])->name('export-pdf');
+});
