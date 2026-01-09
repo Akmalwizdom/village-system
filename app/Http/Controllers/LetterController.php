@@ -161,15 +161,18 @@ class LetterController extends Controller
 
         $letter->load(['template', 'resident']);
         
-        // Generate QR Code as SVG (no Imagick required)
-        $qrCode = QrCode::format('svg')
+        // Generate QR Code as SVG and convert to base64 for PDF
+        $qrSvg = QrCode::format('svg')
             ->size(100)
             ->generate($letter->getVerificationUrl());
+        
+        // Convert SVG to base64 data URI for DomPDF compatibility
+        $qrBase64 = base64_encode($qrSvg);
         
         // Replace QR placeholder in content
         $content = str_replace(
             '{{qr_code}}', 
-            '<div style="width: 100px; height: 100px;">' . $qrCode . '</div>', 
+            '<img src="data:image/svg+xml;base64,' . $qrBase64 . '" style="width: 100px; height: 100px;">', 
             $letter->generated_content
         );
 
@@ -196,15 +199,18 @@ class LetterController extends Controller
 
         $letter->load(['template', 'resident']);
         
-        // Generate QR Code as SVG (no Imagick required)
-        $qrCode = QrCode::format('svg')
+        // Generate QR Code as SVG and convert to base64
+        $qrSvg = QrCode::format('svg')
             ->size(100)
             ->generate($letter->getVerificationUrl());
+        
+        // Convert SVG to base64 data URI
+        $qrBase64 = base64_encode($qrSvg);
         
         // Replace QR placeholder in content
         $content = str_replace(
             '{{qr_code}}', 
-            '<div style="width: 100px; height: 100px;">' . $qrCode . '</div>', 
+            '<img src="data:image/svg+xml;base64,' . $qrBase64 . '" style="width: 100px; height: 100px;">', 
             $letter->generated_content
         );
 
