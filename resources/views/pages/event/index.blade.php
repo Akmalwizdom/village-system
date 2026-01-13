@@ -22,12 +22,36 @@
         <!-- Calendar -->
         <div class="col-lg-8">
             <div class="card border-0 shadow-sm">
-                <div class="card-header bg-transparent d-flex justify-content-between align-items-center">
+                <div class="card-header bg-transparent d-flex justify-content-between align-items-center flex-wrap gap-2">
                     <h5 class="mb-0"><i class="ti ti-calendar me-2 text-primary"></i>Kalender</h5>
-                    <form action="{{ route('event.index') }}" method="GET" class="d-flex gap-2">
-                        <input type="month" name="month" class="form-control form-control-sm" value="{{ $month }}">
-                        <button type="submit" class="btn btn-sm btn-primary"><i class="ti ti-filter"></i></button>
-                    </form>
+                    <div class="d-flex align-items-center gap-2">
+                        <!-- Navigation buttons -->
+                        <a href="{{ route('event.index', ['month' => $date->copy()->subMonth()->format('Y-m')]) }}" 
+                           class="btn btn-sm btn-outline-secondary" title="Bulan Sebelumnya">
+                            <i class="ti ti-chevron-left"></i>
+                        </a>
+                        
+                        <!-- Date Picker -->
+                        <div class="input-group input-group-sm" style="width: auto;">
+                            <span class="input-group-text bg-transparent border-end-0">
+                                <i class="ti ti-calendar"></i>
+                            </span>
+                            <input type="text" class="form-control form-control-sm border-start-0" 
+                                   id="monthPicker" 
+                                   value="{{ $date->translatedFormat('d/m/Y') }}" 
+                                   style="width: 110px;" readonly>
+                        </div>
+                        
+                        <a href="{{ route('event.index', ['month' => $date->copy()->addMonth()->format('Y-m')]) }}" 
+                           class="btn btn-sm btn-outline-secondary" title="Bulan Berikutnya">
+                            <i class="ti ti-chevron-right"></i>
+                        </a>
+                        
+                        <!-- Today button -->
+                        <a href="{{ route('event.index') }}" class="btn btn-sm btn-primary" title="Bulan Ini">
+                            <i class="ti ti-calendar-event me-1"></i>Hari Ini
+                        </a>
+                    </div>
                 </div>
                 <div class="card-body">
                     <div id="calendar"></div>
@@ -122,9 +146,19 @@
                             @if(Auth::user()->role_id == 1)
                             <td class="text-center">
                                 <div class="btn-group btn-group-sm">
-                                    <a href="{{ route('event.edit', $event) }}" class="btn btn-outline-warning" title="Edit">
+                                    <button type="button" class="btn btn-outline-warning btn-edit" title="Edit"
+                                            data-id="{{ $event->id }}"
+                                            data-title="{{ $event->title }}"
+                                            data-category="{{ $event->category }}"
+                                            data-location="{{ $event->location }}"
+                                            data-description="{{ $event->description }}"
+                                            data-start-date="{{ $event->start_date->format('Y-m-d') }}"
+                                            data-start-time="{{ $event->start_date->format('H:i') }}"
+                                            data-end-date="{{ $event->end_date ? $event->end_date->format('Y-m-d') : '' }}"
+                                            data-end-time="{{ $event->end_date ? $event->end_date->format('H:i') : '' }}"
+                                            data-all-day="{{ $event->is_all_day ? '1' : '0' }}">
                                         <i class="ti ti-edit"></i>
-                                    </a>
+                                    </button>
                                     <form action="{{ route('event.destroy', $event) }}" method="POST" class="d-inline delete-form">
                                         @csrf
                                         @method('DELETE')
@@ -234,6 +268,87 @@
 </div>
 @endif
 
+<!-- Edit Event Modal -->
+@if(Auth::user()->role_id == 1)
+<div class="modal fade" id="editEventModal" tabindex="-1" aria-labelledby="editEventModalLabel" aria-hidden="true">
+    <div class="modal-dialog modal-lg">
+        <div class="modal-content">
+            <form id="editEventForm" method="POST">
+                @csrf
+                @method('PUT')
+                <div class="modal-header">
+                    <h5 class="modal-title" id="editEventModalLabel">
+                        <i class="ti ti-edit me-2 text-warning"></i>Edit Kegiatan
+                    </h5>
+                    <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
+                </div>
+                <div class="modal-body">
+                    <div class="mb-3">
+                        <label for="edit_title" class="form-label fw-medium">Judul Kegiatan <span class="text-danger">*</span></label>
+                        <input type="text" class="form-control" id="edit_title" name="title" required>
+                    </div>
+
+                    <div class="row mb-3">
+                        <div class="col-md-6">
+                            <label for="edit_category" class="form-label fw-medium">Kategori <span class="text-danger">*</span></label>
+                            <select class="form-select" id="edit_category" name="category" required>
+                                @foreach(\App\Models\Event::CATEGORIES as $key => $label)
+                                <option value="{{ $key }}">{{ $label }}</option>
+                                @endforeach
+                            </select>
+                        </div>
+                        <div class="col-md-6">
+                            <label for="edit_location" class="form-label fw-medium">Lokasi</label>
+                            <input type="text" class="form-control" id="edit_location" name="location">
+                        </div>
+                    </div>
+
+                    <div class="mb-3">
+                        <div class="form-check">
+                            <input class="form-check-input" type="checkbox" id="edit_is_all_day" name="is_all_day" value="1">
+                            <label class="form-check-label" for="edit_is_all_day">Sepanjang hari</label>
+                        </div>
+                    </div>
+
+                    <div class="row mb-3">
+                        <div class="col-md-6">
+                            <label for="edit_start_date" class="form-label fw-medium">Tanggal Mulai <span class="text-danger">*</span></label>
+                            <input type="date" class="form-control" id="edit_start_date" name="start_date" required>
+                        </div>
+                        <div class="col-md-6 edit-time-field">
+                            <label for="edit_start_time" class="form-label fw-medium">Waktu Mulai</label>
+                            <input type="time" class="form-control" id="edit_start_time" name="start_time">
+                        </div>
+                    </div>
+
+                    <div class="row mb-3">
+                        <div class="col-md-6">
+                            <label for="edit_end_date" class="form-label fw-medium">Tanggal Selesai</label>
+                            <input type="date" class="form-control" id="edit_end_date" name="end_date">
+                        </div>
+                        <div class="col-md-6 edit-time-field">
+                            <label for="edit_end_time" class="form-label fw-medium">Waktu Selesai</label>
+                            <input type="time" class="form-control" id="edit_end_time" name="end_time">
+                        </div>
+                    </div>
+
+                    <div class="mb-3">
+                        <label for="edit_description" class="form-label fw-medium">Deskripsi</label>
+                        <textarea class="form-control" id="edit_description" name="description" rows="3"></textarea>
+                    </div>
+                </div>
+                <div class="modal-footer">
+                    <button type="button" class="btn btn-outline-secondary" data-bs-dismiss="modal">Batal</button>
+                    <button type="submit" class="btn btn-warning">
+                        <i class="ti ti-check me-1"></i>Simpan Perubahan
+                    </button>
+                </div>
+            </form>
+        </div>
+    </div>
+</div>
+@endif
+
 <style>
 #calendar {
     min-height: 400px;
@@ -259,6 +374,13 @@
 }
 </style>
 
+<!-- Flatpickr Date Picker -->
+<link href="https://cdn.jsdelivr.net/npm/flatpickr/dist/flatpickr.min.css" rel="stylesheet">
+<link href="https://cdn.jsdelivr.net/npm/flatpickr/dist/themes/dark.css" rel="stylesheet">
+<script src="https://cdn.jsdelivr.net/npm/flatpickr"></script>
+<script src="https://cdn.jsdelivr.net/npm/flatpickr/dist/l10n/id.js"></script>
+
+<!-- FullCalendar -->
 <link href='https://cdn.jsdelivr.net/npm/fullcalendar@6.1.8/index.global.min.css' rel='stylesheet'>
 <script src='https://cdn.jsdelivr.net/npm/fullcalendar@6.1.8/index.global.min.js'></script>
 
@@ -292,7 +414,22 @@ document.addEventListener('DOMContentLoaded', function() {
     });
     calendar.render();
 
-    // Toggle time fields based on all-day checkbox
+    // Initialize Flatpickr date picker
+    flatpickr("#monthPicker", {
+        locale: "id",
+        dateFormat: "d/m/Y",
+        defaultDate: "{{ $date->format('Y-m-d') }}",
+        onChange: function(selectedDates, dateStr, instance) {
+            if (selectedDates.length > 0) {
+                const date = selectedDates[0];
+                const year = date.getFullYear();
+                const month = String(date.getMonth() + 1).padStart(2, '0');
+                window.location.href = "{{ route('event.index') }}?month=" + year + "-" + month;
+            }
+        }
+    });
+
+    // Toggle time fields based on all-day checkbox (Add Modal)
     const allDayCheckbox = document.getElementById('is_all_day');
     const timeFields = document.querySelectorAll('.time-field');
 
@@ -306,6 +443,59 @@ document.addEventListener('DOMContentLoaded', function() {
         allDayCheckbox.addEventListener('change', toggleTimeFields);
         toggleTimeFields();
     }
+
+    // Toggle time fields for Edit Modal
+    const editAllDayCheckbox = document.getElementById('edit_is_all_day');
+    const editTimeFields = document.querySelectorAll('.edit-time-field');
+
+    if (editAllDayCheckbox) {
+        function toggleEditTimeFields() {
+            editTimeFields.forEach(field => {
+                field.style.display = editAllDayCheckbox.checked ? 'none' : 'block';
+            });
+        }
+
+        editAllDayCheckbox.addEventListener('change', toggleEditTimeFields);
+    }
+
+    // Edit button handler - populate modal with data
+    document.querySelectorAll('.btn-edit').forEach(button => {
+        button.addEventListener('click', function() {
+            const id = this.dataset.id;
+            const title = this.dataset.title;
+            const category = this.dataset.category;
+            const location = this.dataset.location;
+            const description = this.dataset.description;
+            const startDate = this.dataset.startDate;
+            const startTime = this.dataset.startTime;
+            const endDate = this.dataset.endDate;
+            const endTime = this.dataset.endTime;
+            const allDay = this.dataset.allDay === '1';
+
+            // Set form action
+            document.getElementById('editEventForm').action = '/event/' + id;
+
+            // Populate fields
+            document.getElementById('edit_title').value = title;
+            document.getElementById('edit_category').value = category;
+            document.getElementById('edit_location').value = location || '';
+            document.getElementById('edit_description').value = description || '';
+            document.getElementById('edit_start_date').value = startDate;
+            document.getElementById('edit_start_time').value = startTime;
+            document.getElementById('edit_end_date').value = endDate;
+            document.getElementById('edit_end_time').value = endTime;
+            document.getElementById('edit_is_all_day').checked = allDay;
+
+            // Toggle time fields
+            editTimeFields.forEach(field => {
+                field.style.display = allDay ? 'none' : 'block';
+            });
+
+            // Show modal
+            const modal = new bootstrap.Modal(document.getElementById('editEventModal'));
+            modal.show();
+        });
+    });
 
     // Delete confirmation with SweetAlert
     document.querySelectorAll('.btn-delete').forEach(button => {
