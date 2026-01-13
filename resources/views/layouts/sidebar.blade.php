@@ -90,6 +90,20 @@
                             <span class="pc-mtext">Agenda</span>
                         </a>
                     </li>
+
+                    <li class="pc-item">
+                        <a href="/announcement" class="pc-link">
+                            <span class="pc-micon"><i class="ti ti-speakerphone"></i></span>
+                            <span class="pc-mtext">Pengumuman</span>
+                        </a>
+                    </li>
+
+                    <li class="pc-item">
+                        <a href="/info" class="pc-link">
+                            <span class="pc-micon"><i class="ti ti-info-circle"></i></span>
+                            <span class="pc-mtext">Info Layanan</span>
+                        </a>
+                    </li>
                 @endif
             </ul>
         </div>

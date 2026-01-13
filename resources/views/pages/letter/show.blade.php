@@ -16,19 +16,60 @@
         </div>
     </div>
 
-    @if(session('success'))
-    <div class="alert alert-success alert-dismissible fade show">
-        <i class="ti ti-check me-2"></i>{{ session('success') }}
-        <button type="button" class="btn-close" data-bs-dismiss="alert"></button>
+    <!-- Status Timeline Tracking -->
+    <div class="row mb-4">
+        <div class="col-12">
+            <div class="card border-0 shadow-sm">
+                <div class="card-body py-4">
+                    <div class="d-flex justify-content-between position-relative">
+                        <!-- Progress Line -->
+                        <div class="position-absolute" style="top: 20px; left: 60px; right: 60px; height: 3px; background: #374151; z-index: 0;">
+                            <div class="h-100" style="width: {{ $letter->status === 'pending' ? '0%' : ($letter->status === 'approved' ? '100%' : '50%') }}; background: {{ $letter->status === 'rejected' ? '#ef4444' : '#10b981' }};"></div>
+                        </div>
+                        
+                        <!-- Step 1: Diajukan -->
+                        <div class="text-center position-relative" style="z-index: 1;">
+                            <div class="avtar avtar-s {{ $letter->status ? 'bg-success' : 'bg-secondary' }} mx-auto mb-2">
+                                <i class="ti ti-send text-white"></i>
+                            </div>
+                            <small class="d-block fw-medium">Diajukan</small>
+                            <small class="text-muted">{{ $letter->created_at->format('d M Y') }}</small>
+                        </div>
+                        
+                        <!-- Step 2: Diproses -->
+                        <div class="text-center position-relative" style="z-index: 1;">
+                            <div class="avtar avtar-s {{ $letter->status !== 'pending' ? ($letter->status === 'rejected' ? 'bg-danger' : 'bg-success') : 'bg-secondary' }} mx-auto mb-2">
+                                <i class="ti ti-clock text-white"></i>
+                            </div>
+                            <small class="d-block fw-medium">Diproses</small>
+                            <small class="text-muted">{{ $letter->status === 'pending' ? 'Menunggu' : ($letter->approved_at ? $letter->approved_at->format('d M Y') : '-') }}</small>
+                        </div>
+                        
+                        <!-- Step 3: Selesai -->
+                        <div class="text-center position-relative" style="z-index: 1;">
+                            @if($letter->status === 'approved')
+                            <div class="avtar avtar-s bg-success mx-auto mb-2">
+                                <i class="ti ti-check text-white"></i>
+                            </div>
+                            <small class="d-block fw-medium text-success">Disetujui</small>
+                            @elseif($letter->status === 'rejected')
+                            <div class="avtar avtar-s bg-danger mx-auto mb-2">
+                                <i class="ti ti-x text-white"></i>
+                            </div>
+                            <small class="d-block fw-medium text-danger">Ditolak</small>
+                            @else
+                            <div class="avtar avtar-s bg-secondary mx-auto mb-2">
+                                <i class="ti ti-flag text-white"></i>
+                            </div>
+                            <small class="d-block fw-medium">Selesai</small>
+                            @endif
+                            <small class="text-muted">{{ $letter->approved_at ? $letter->approved_at->format('d M Y') : '-' }}</small>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
     </div>
-    @endif
-
-    @if(session('error'))
-    <div class="alert alert-danger alert-dismissible fade show">
-        <i class="ti ti-x me-2"></i>{{ session('error') }}
-        <button type="button" class="btn-close" data-bs-dismiss="alert"></button>
-    </div>
-    @endif
 
     <div class="row">
         <div class="col-lg-8">

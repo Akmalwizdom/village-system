@@ -134,3 +134,13 @@ Route::middleware(['auth'])->prefix('event')->name('event.')->group(function () 
         Route::delete('/{event}', [EventController::class, 'destroy'])->name('destroy');
     });
 });
+
+// Portal Warga Routes
+use App\Http\Controllers\AnnouncementController;
+
+Route::middleware(['auth'])->group(function () {
+    Route::get('/announcement', [AnnouncementController::class, 'index'])->name('announcement.index');
+    Route::get('/info', function () {
+        return view('pages.info.index');
+    })->name('info.index');
+});
