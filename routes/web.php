@@ -114,3 +114,21 @@ Route::middleware(['auth', 'role:Admin'])->prefix('finance')->name('finance.')->
     Route::get('/report', [FinanceController::class, 'report'])->name('report');
     Route::get('/export-pdf', [FinanceController::class, 'exportPdf'])->name('export-pdf');
 });
+
+// Event Routes (Modul Agenda/Kegiatan)
+use App\Http\Controllers\EventController;
+
+Route::middleware(['auth'])->prefix('event')->name('event.')->group(function () {
+    Route::get('/', [EventController::class, 'index'])->name('index');
+    Route::get('/events-api', [EventController::class, 'getEvents'])->name('api');
+    Route::get('/{event}', [EventController::class, 'show'])->name('show');
+    
+    // Admin only
+    Route::middleware('role:Admin')->group(function () {
+        Route::get('/add/new', [EventController::class, 'create'])->name('create');
+        Route::post('/', [EventController::class, 'store'])->name('store');
+        Route::get('/{event}/edit', [EventController::class, 'edit'])->name('edit');
+        Route::put('/{event}', [EventController::class, 'update'])->name('update');
+        Route::delete('/{event}', [EventController::class, 'destroy'])->name('destroy');
+    });
+});

@@ -62,6 +62,13 @@
                             <span class="pc-mtext">Keuangan</span>
                         </a>
                     </li>
+
+                    <li class="pc-item">
+                        <a href="/event" class="pc-link">
+                            <span class="pc-micon"><i class="ti ti-calendar-event"></i></span>
+                            <span class="pc-mtext">Agenda</span>
+                        </a>
+                    </li>
                 @else
                     <li class="pc-item">
                         <a href="/complaint" class="pc-link">
@@ -74,6 +81,13 @@
                         <a href="/letter" class="pc-link">
                             <span class="pc-micon"><i class="ti ti-file-text"></i></span>
                             <span class="pc-mtext">Surat</span>
+                        </a>
+                    </li>
+
+                    <li class="pc-item">
+                        <a href="/event" class="pc-link">
+                            <span class="pc-micon"><i class="ti ti-calendar-event"></i></span>
+                            <span class="pc-mtext">Agenda</span>
                         </a>
                     </li>
                 @endif
