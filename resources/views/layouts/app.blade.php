@@ -81,10 +81,46 @@
               Ya, Logout
             </button>
           </form>
-        </div>
       </div>
     </div>
   </div>
+
+  <!-- SweetAlert2 Init -->
+  <script src="{{ asset('js/swal-init.js') }}"></script>
+  
+  <!-- Flash Session Handler -->
+  @if(session('success'))
+  <script>
+    document.addEventListener('DOMContentLoaded', function() {
+      showSuccess("{{ session('success') }}");
+    });
+  </script>
+  @endif
+  
+  @if(session('error'))
+  <script>
+    document.addEventListener('DOMContentLoaded', function() {
+      showError("{{ session('error') }}");
+    });
+  </script>
+  @endif
+  
+  @if(session('warning'))
+  <script>
+    document.addEventListener('DOMContentLoaded', function() {
+      showWarning("{{ session('warning') }}");
+    });
+  </script>
+  @endif
+  
+  @if(session('info'))
+  <script>
+    document.addEventListener('DOMContentLoaded', function() {
+      showInfo("{{ session('info') }}");
+    });
+  </script>
+  @endif
+
   @stack('scripts')
   </body>
 </html>

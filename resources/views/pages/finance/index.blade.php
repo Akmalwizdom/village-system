@@ -16,13 +16,6 @@
         </div>
     </div>
 
-    @if(session('success'))
-    <div class="alert alert-success alert-dismissible fade show">
-        <i class="ti ti-check me-2"></i>{{ session('success') }}
-        <button type="button" class="btn-close" data-bs-dismiss="alert"></button>
-    </div>
-    @endif
-
     <!-- Filters -->
     <div class="card border-0 shadow-sm mb-4">
         <div class="card-body">
@@ -90,11 +83,10 @@
                                     <a href="{{ route('finance.edit', $tx) }}" class="btn btn-outline-warning" title="Edit">
                                         <i class="ti ti-edit"></i>
                                     </a>
-                                    <form action="{{ route('finance.destroy', $tx) }}" method="POST" class="d-inline" 
-                                          onsubmit="return confirm('Yakin ingin menghapus transaksi ini?')">
+                                    <form action="{{ route('finance.destroy', $tx) }}" method="POST" class="d-inline delete-form">
                                         @csrf
                                         @method('DELETE')
-                                        <button type="submit" class="btn btn-outline-danger" title="Hapus">
+                                        <button type="button" class="btn btn-outline-danger btn-delete" title="Hapus">
                                             <i class="ti ti-trash"></i>
                                         </button>
                                     </form>
@@ -123,3 +115,16 @@
     </div>
 </div>
 @endsection
+
+@push('scripts')
+<script>
+document.addEventListener('DOMContentLoaded', function() {
+    document.querySelectorAll('.btn-delete').forEach(button => {
+        button.addEventListener('click', function() {
+            const form = this.closest('form');
+            confirmDelete(form, 'Transaksi yang dihapus tidak dapat dikembalikan!');
+        });
+    });
+});
+</script>
+@endpush

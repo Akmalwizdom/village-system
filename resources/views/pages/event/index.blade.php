@@ -18,23 +18,6 @@
         </div>
     </div>
 
-    @if(session('success'))
-    <div class="alert alert-success alert-dismissible fade show">
-        <i class="ti ti-check me-2"></i>{{ session('success') }}
-        <button type="button" class="btn-close" data-bs-dismiss="alert"></button>
-    </div>
-    @endif
-
-    @if($errors->any())
-    <div class="alert alert-danger alert-dismissible fade show">
-        <i class="ti ti-alert-circle me-2"></i>
-        @foreach($errors->all() as $error)
-            {{ $error }}<br>
-        @endforeach
-        <button type="button" class="btn-close" data-bs-dismiss="alert"></button>
-    </div>
-    @endif
-
     <div class="row g-3">
         <!-- Calendar -->
         <div class="col-lg-8">
@@ -142,11 +125,10 @@
                                     <a href="{{ route('event.edit', $event) }}" class="btn btn-outline-warning" title="Edit">
                                         <i class="ti ti-edit"></i>
                                     </a>
-                                    <form action="{{ route('event.destroy', $event) }}" method="POST" class="d-inline" 
-                                          onsubmit="return confirm('Yakin ingin menghapus kegiatan ini?')">
+                                    <form action="{{ route('event.destroy', $event) }}" method="POST" class="d-inline delete-form">
                                         @csrf
                                         @method('DELETE')
-                                        <button type="submit" class="btn btn-outline-danger" title="Hapus">
+                                        <button type="button" class="btn btn-outline-danger btn-delete" title="Hapus">
                                             <i class="ti ti-trash"></i>
                                         </button>
                                     </form>
@@ -324,6 +306,14 @@ document.addEventListener('DOMContentLoaded', function() {
         allDayCheckbox.addEventListener('change', toggleTimeFields);
         toggleTimeFields();
     }
+
+    // Delete confirmation with SweetAlert
+    document.querySelectorAll('.btn-delete').forEach(button => {
+        button.addEventListener('click', function() {
+            const form = this.closest('form');
+            confirmDelete(form, 'Kegiatan yang dihapus tidak dapat dikembalikan!');
+        });
+    });
 });
 </script>
 @endsection

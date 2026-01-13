@@ -90,11 +90,10 @@
             <div class="card border-0 shadow-sm bg-danger bg-opacity-10">
                 <div class="card-body">
                     <h6 class="text-danger mb-3"><i class="ti ti-alert-triangle me-2"></i>Zona Bahaya</h6>
-                    <form action="{{ route('event.destroy', $event) }}" method="POST" 
-                          onsubmit="return confirm('Yakin ingin menghapus kegiatan ini?')">
+                    <form action="{{ route('event.destroy', $event) }}" method="POST" id="deleteForm">
                         @csrf
                         @method('DELETE')
-                        <button type="submit" class="btn btn-outline-danger w-100">
+                        <button type="button" class="btn btn-outline-danger w-100" id="btnDeleteEvent">
                             <i class="ti ti-trash me-1"></i>Hapus Kegiatan
                         </button>
                     </form>
@@ -104,4 +103,17 @@
         </div>
     </div>
 </div>
+
+@push('scripts')
+<script>
+document.addEventListener('DOMContentLoaded', function() {
+    const btnDelete = document.getElementById('btnDeleteEvent');
+    if (btnDelete) {
+        btnDelete.addEventListener('click', function() {
+            confirmDelete(document.getElementById('deleteForm'), 'Kegiatan yang dihapus tidak dapat dikembalikan!');
+        });
+    }
+});
+</script>
+@endpush
 @endsection
