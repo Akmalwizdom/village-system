@@ -24,6 +24,8 @@ Route::get('/resident/{id}/edit', [ResidentController::class, 'edit'])->middlewa
 Route::post('/resident', [ResidentController::class, 'store'])->middleware('role:Admin');
 Route::put('/resident/{id}', [ResidentController::class, 'update'])->middleware('role:Admin');
 Route::delete('/resident/{id}', [ResidentController::class, 'destroy'])->middleware('role:Admin');
+Route::get('/resident-export-excel', [ResidentController::class, 'exportExcel'])->middleware('role:Admin')->name('resident.export.excel');
+Route::get('/resident-export-pdf', [ResidentController::class, 'exportPdf'])->middleware('role:Admin')->name('resident.export.pdf');
 
 Route::get('/account-list', [UserController::class, 'accountListView'])->middleware('role:Admin');
 

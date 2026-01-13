@@ -7,14 +7,26 @@
             <div class="col-12">
                 <div class="card border-0 shadow-sm">
                     <div class="card-body">
-                        <div class="d-flex align-items-center">
-                            <div class="avtar avtar-l bg-light-primary me-3">
-                                <i class="ti ti-users text-primary f-24"></i>
+                        <div class="d-flex align-items-center justify-content-between flex-wrap gap-2">
+                            <div class="d-flex align-items-center">
+                                <div class="avtar avtar-l bg-light-primary me-3">
+                                    <i class="ti ti-users text-primary f-24"></i>
+                                </div>
+                                <div>
+                                    <h4 class="mb-1 text-dark fw-bold">Data Penduduk</h4>
+                                    <p class="text-muted mb-0">Kelola dan pantau data kependudukan desa</p>
+                                </div>
                             </div>
-                            <div>
-                                <h4 class="mb-1 text-dark fw-bold">Data Penduduk</h4>
-                                <p class="text-muted mb-0">Kelola dan pantau data kependudukan desa</p>
+                            @if(Auth::user()->role_id == 1)
+                            <div class="d-flex gap-2">
+                                <a href="{{ route('resident.export.excel') }}" class="btn btn-success">
+                                    <i class="ti ti-file-spreadsheet me-1"></i>Export Excel
+                                </a>
+                                <a href="{{ route('resident.export.pdf') }}" class="btn btn-danger">
+                                    <i class="ti ti-file-pdf me-1"></i>Export PDF
+                                </a>
                             </div>
+                            @endif
                         </div>
                     </div>
                 </div>
